@@ -1,7 +1,7 @@
 import React from "react";
 import {GraduationCap} from "lucide-react";
 import { Link } from "react-router-dom";
-import {Tabs} from "@/components/ui/tabs";
+import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import { useState } from "react";
 
 const AuthPage = () => {
@@ -20,9 +20,14 @@ const AuthPage = () => {
         <Tabs
           value={activeTab}
           defaultValue="signin"
-          onValueChange={handleTabChange}
+          onValueChange={e => setActiveTab(e)}
           className="w-full max-w-md">
-
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign in</TabsTrigger>
+              <TabsTrigger value="signup">Sign in</TabsTrigger>
+            </TabsList>
+            <TabsContent value="signin">signin</TabsContent>
+            <TabsContent value="signup">signup</TabsContent>
         </Tabs>
       </div>
     </div>
