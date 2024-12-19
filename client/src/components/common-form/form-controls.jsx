@@ -1,5 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
+
 
 function FormControls({formControls = [], fromData, setFormData}){
   function renderComponentByType(getControlItem) {  
@@ -15,7 +25,33 @@ function FormControls({formControls = [], fromData, setFormData}){
             placeholder={getControlItem.placeholder}
             type={getControlItem.type}
           />
-      )}
+          )
+        break;
+
+      case "select":
+        element = (
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={getControlItem.label}></SelectValue>
+            </SelectTrigger>
+          </Select>
+        )
+        break;
+
+      case "textarea":
+        element = (
+          <Textarea
+            id={getControlItem.name}
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            type={getControlItem.type}
+          />
+        )
+        break;
+      
+      
+      
+      default: break;}
     }
   return (
     <div className="flex flex-col gap-3">
