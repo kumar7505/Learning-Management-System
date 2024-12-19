@@ -1,4 +1,5 @@
 import { Button } from "../ui/button";
+import FormControls from "./form-controls";
 
 function CommonForm({
     handleSubmit,
