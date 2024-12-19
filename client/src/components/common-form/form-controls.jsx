@@ -11,7 +11,7 @@ import {
 import { Textarea } from "../ui/textarea";
 
 
-function FormControls({formControls = [], fromData, setFormData}){
+function FormControls({formControls = [], formData, setFormData}){
   function renderComponentByType(getControlItem) {  
     let element = null;
     const currentControlItemValue = formData[getControlItem.name] || "";
@@ -60,7 +60,17 @@ function FormControls({formControls = [], fromData, setFormData}){
       
       
       
-      default: break;}
+      default: 
+        element = (
+          <Input
+            id={getControlItem.name}
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            type={getControlItem.type}
+          />
+          )
+        break;
+    }
     }
   return (
     <div className="flex flex-col gap-3">

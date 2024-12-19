@@ -2,11 +2,19 @@ import { Button } from "../ui/button";
 
 function CommonForm({
     handleSubmit,
-    buttonText
+    buttonText,
+    formControls = [], 
+    formData, 
+    setFormData
   }) {
     return (
       <form onSubmit={handleSubmit}>
         {/* render form controls here */}
+        <FormControls
+          formControls={formControls}
+          formData={formData}
+          setFormData={setFormData}
+        />
         <Button type="submit">{buttonText || "Submit"}</Button>
     </form>
     );
