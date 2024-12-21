@@ -12,10 +12,9 @@ import { Textarea } from "../ui/textarea";
 
 
 function FormControls({formControls = [], formData, setFormData}){
-  function renderComponentByType(getControlItem) {  
+  function renderComponentByType(getControlItem) { 
     let element = null;
-    const currentControlItemValue = formData[getControlItem.name] || "";
-
+    // const currentControlItemValue = formData[getControlItem.name] || "";
     switch (getControlItem.componentType) {
       case "input":
         element = (
@@ -74,9 +73,10 @@ function FormControls({formControls = [], formData, setFormData}){
     }
   return (
     <div className="flex flex-col gap-3">
-      {formControls.map((controleItem) => (
-        <div key={controleItem.name}>
-          <Label htmlFor={controlItem.name}>{controleItem.label}</Label>
+      {console.log(formControls)}
+      {formControls.map((controlItem) => (
+        <div key={controlItem.name}>
+          <Label htmlFor={controlItem.name}>{controlItem.label}</Label>
           {renderComponentByType(controlItem)}
         </div>
       ))}

@@ -1,6 +1,6 @@
 export const signUpFormControls = [
     {
-      name: "userName",
+      name: "Kumarxx",
       label: "User Name",
       placeholder: "Enter your user name",
       type: "text",

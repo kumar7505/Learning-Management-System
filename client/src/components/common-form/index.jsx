@@ -6,7 +6,7 @@ function CommonForm({
     buttonText,
     formControls = [], 
     formData, 
-    setFormData
+    setFormData,
   }) {
     return (
       <form onSubmit={handleSubmit}>
