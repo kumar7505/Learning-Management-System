@@ -31,7 +31,7 @@ const AuthPage = () => {
             </TabsList>
             <TabsContent value="signin">
               <Card className="p-6 space-y-4">
-                
+
                 <CardHeader>
                   <CardTitle>Sign in to your account</CardTitle>
                   <CardDescription>
@@ -48,9 +48,22 @@ const AuthPage = () => {
               </Card>
             </TabsContent>
             <TabsContent value="signup">
-              <CommonForm 
+            <Card className="p-6 space-y-4">
+
+              <CardHeader>
+                <CardTitle>Create a new account</CardTitle>
+                <CardDescription>
+                  Enter your details to get started
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <CommonForm
                 formControls={signUpFormControls}
-              />
+                buttonText={"Sign Up"}
+                />
+              </CardContent>
+
+            </Card>
             </TabsContent>
         </Tabs>
       </div>
