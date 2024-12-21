@@ -69,7 +69,8 @@ function FormControls({formControls = [], formData, setFormData}){
           />
           )
         break;
-    }
+      }
+      return element; 
     }
   return (
     <div className="flex flex-col gap-3">
