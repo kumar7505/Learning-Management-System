@@ -5,6 +5,7 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import { useState } from "react";
 import { signUpFormControls, signInFormControls } from "@/config";
 import CommonForm from "@/components/common-form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState("signin");
@@ -29,9 +30,22 @@ const AuthPage = () => {
               <TabsTrigger value="signup">Sign up</TabsTrigger>
             </TabsList>
             <TabsContent value="signin">
-              <CommonForm 
+              <Card className="p-6 space-y-4">
+                
+                <CardHeader>
+                  <CardTitle>Sign in to your account</CardTitle>
+                  <CardDescription>
+                    Enter your email and Password to access your Account
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <CommonForm
                   formControls={signInFormControls}
-              />
+                  buttonText={"Sign In"}
+                  />
+                </CardContent>
+
+              </Card>
             </TabsContent>
             <TabsContent value="signup">
               <CommonForm 
