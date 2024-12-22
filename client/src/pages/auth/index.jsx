@@ -6,9 +6,15 @@ import { useState } from "react";
 import { signUpFormControls, signInFormControls } from "@/config";
 import CommonForm from "@/components/common-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AuthContext } from "@/context/auth-context";
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState("signin");
+  const {
+    signInFormData,
+    setSignInFormData,
+    signUpFormData,
+    setSignUpFormData } = useContext(AuthContext) 
 
   return (
     <div className="flex flex-col min-h-screen">
