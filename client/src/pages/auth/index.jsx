@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {GraduationCap} from "lucide-react";
 import { Link } from "react-router-dom";
 import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
@@ -48,6 +48,8 @@ const AuthPage = () => {
                   <CommonForm
                   formControls={signInFormControls}
                   buttonText={"Sign In"}
+                  formData={signInFormData}
+                  setFormData={setSignInFormData}
                   />
                 </CardContent>
 
@@ -66,6 +68,8 @@ const AuthPage = () => {
                 <CommonForm
                 formControls={signUpFormControls}
                 buttonText={"Sign Up"}
+                formData={signUpFormData}
+                setFormData={setSignUpFormData}
                 />
               </CardContent>
 
