@@ -14,7 +14,8 @@ const AuthPage = () => {
     signInFormData,
     setSignInFormData,
     signUpFormData,
-    setSignUpFormData } = useContext(AuthContext) 
+    setSignUpFormData,
+    handleRegisterUser, } = useContext(AuthContext) 
 
     function checkIfSignInFormIsValid() {
       return signInFormData && 
@@ -64,11 +65,11 @@ const AuthPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <CommonForm
-                  formControls={signInFormControls}
-                  buttonText={"Sign In"}
-                  formData={signInFormData}
-                  setFormData={setSignInFormData}
-                  isButtonDisabled={!checkIfSignInFormIsValid()}
+                    formControls={signInFormControls}
+                    buttonText={"Sign In"}
+                    formData={signInFormData}
+                    setFormData={setSignInFormData}
+                    isButtonDisabled={!checkIfSignInFormIsValid()}
                   />
                 </CardContent>
 
@@ -85,11 +86,12 @@ const AuthPage = () => {
               </CardHeader>
               <CardContent className="space-y-2">
                 <CommonForm
-                formControls={signUpFormControls}
-                buttonText={"Sign Up"}
-                formData={signUpFormData}
-                setFormData={setSignUpFormData}
-                isButtonDisabled={!checkIfSignUpFormIsValid()}
+                  formControls={signUpFormControls}
+                  buttonText={"Sign Up"}
+                  formData={signUpFormData}
+                  setFormData={setSignUpFormData}
+                  isButtonDisabled={!checkIfSignUpFormIsValid()}
+                  handleSubmit={handleRegisterUser}
                 />
               </CardContent>
 
