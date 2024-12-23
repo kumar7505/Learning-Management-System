@@ -5,7 +5,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/auth" element={<AuthPage/>} />
+      <Route path="/auth/register" element={<AuthPage/>} />
     </Routes>
   );
 };
