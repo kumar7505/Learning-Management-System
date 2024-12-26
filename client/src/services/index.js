@@ -23,7 +23,7 @@ export async function loginService(formData){
     }
 } 
 
-export async function checkAuth(){
+export async function checkAuthService(){
     try {
         const { data } = await axiosInstance.get("/auth/check-auth");
         return data;

@@ -22,6 +22,7 @@ const AuthPage = () => {
       return signInFormData && 
       signInFormData.userEmail !== '' &&
       signInFormData.password !== ''; 
+      
     }
 
     function checkIfSignUpFormIsValid(){
@@ -31,8 +32,6 @@ const AuthPage = () => {
       signUpFormData.password !== ''; 
     }
 
-    console.log(signInFormControls);
-    console.log(signInFormData);
     
     
 
