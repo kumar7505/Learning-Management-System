@@ -169,6 +169,5 @@ export const courseCurriculumInitialFormData = [
     videoUrl: "",
     frePreview: false,
     public_id: "",
-
   },
 ]
