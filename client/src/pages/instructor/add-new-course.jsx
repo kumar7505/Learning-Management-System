@@ -1,6 +1,9 @@
+import CourseCurriculum from '@/components/instructor-view/courses/add-new-course/course-curriculum'
+import CourseLanding from '@/components/instructor-view/courses/add-new-course/course-landing'
+import CourseSettings from '@/components/instructor-view/courses/add-new-course/course-setting'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import React, { useRef, useState } from 'react'
 
 const AddNewCoursePage = () => {
@@ -30,24 +33,33 @@ const AddNewCoursePage = () => {
                                 autoFocus
                                 onClick={() => handleTabClick("curriculum")}
                                 className={`px-4 py-2 text-sm font-medium rounded-lg ${
-                                  focusedTab === "curriculum" ? "bg-black text-white" : "bg-gray-200 text-gray-700"
+                                  focusedTab === "curriculum" ? "bg-black text-white" : "bg-gray-100 text-gray-700"
                                 } hover:bg-gray-300 border-none outline-none`}
                                 > Curriculum </TabsTrigger>
                             <TabsTrigger
                                 value="course-landing-page"
                                 onClick={() => handleTabClick("course-landing-page")}
                                 className={`px-4 py-2 text-sm font-medium rounded-lg ${
-                                focusedTab === "course-landing-page" ? "bg-black text-white" : "bg-gray-200 text-gray-700"
+                                focusedTab === "course-landing-page" ? "bg-black text-white" : "bg-gray-100 text-gray-700"
                                 } hover:bg-gray-300 border-none outline-none`}
                                 > Course Landing Page </TabsTrigger>
                             <TabsTrigger
                                 value="settings"
                                 onClick={() => handleTabClick("settings")}
                                 className={`px-4 py-2 text-sm font-medium rounded-lg ${
-                                focusedTab === "settings" ? "bg-black text-white" : "bg-gray-200 text-gray-700"
+                                focusedTab === "settings" ? "bg-black text-white" : "bg-gray-100 text-gray-700"
                                 } hover:bg-gray-300 border-none outline-none`}
                                 > Settings </TabsTrigger>
                         </TabsList>
+                        <TabsContent value="curriculum">
+                            <CourseCurriculum />
+                        </TabsContent>
+                        <TabsContent value="course-landing-page">
+                            <CourseLanding />
+                        </TabsContent>
+                        <TabsContent value="settings">
+                            <CourseSettings />
+                        </TabsContent>
                     </Tabs>
                 </div>
             </CardContent>
