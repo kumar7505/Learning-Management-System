@@ -11,7 +11,6 @@ import NotFoundPage from './pages/not-found';
 import AddNewCoursePage from './pages/instructor/add-new-course';
 function App() {
   const { auth } = useContext(AuthContext);
-
   return (
     <Routes>
       <Route
