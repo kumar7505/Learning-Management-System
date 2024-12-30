@@ -16,7 +16,7 @@ const CourseCurriculum = () => {
       ...courseCurriculumFormData,
       {
         ...courseCurriculumInitialFormData[0]
-      }
+      },
     ])
   }
   console.log(courseCurriculumFormData);
@@ -27,19 +27,19 @@ const CourseCurriculum = () => {
       </CardHeader>
 
       <CardContent>
-        <Button onClick={handleNewLecture()}>Add Lecture</Button>
+        <Button onClick={handleNewLecture}>Add Lecture</Button>
         <div className="mt-4 space-y-4">
           {courseCurriculumFormData.map((curriculumItem, index) => {
             return (
               <div className="border p-5 rounded-md" key={index}>
-                <div className="flex gap-5">
+                <div className="flex gap-5 items-center">
                   <h3 className="font-semibold">Lecture {index + 1}</h3>
                   <Input 
                     name={`title-${index+1}`}
                     placeholder="Enter Lecture Title"
                     className="max-w-96 items-center"
                   />
-                  <div className="flex items-center space-x-2">
+                  <div className="flex space-x-2">
                     <Switch 
                     checked={false}
                     id={`freePreview-${index+1}`}
@@ -47,7 +47,7 @@ const CourseCurriculum = () => {
                     <Label htmlForm={`freePreview-${index+1}`}>Free Preview</Label>
                   </div>
                 </div>
-                <div className="mt-6">
+                <div className="mt-4">
                   <Input 
                   type="file"
                   accept="video/*"
