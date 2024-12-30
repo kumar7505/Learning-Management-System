@@ -71,7 +71,6 @@ export default function AuthProvider({ children }) {
     }
   }
 
-
   useEffect(() => {
     checkAuthUser();
   }, []);
@@ -93,4 +92,4 @@ export default function AuthProvider({ children }) {
       {loading ? <Skeleton /> : children}
     </AuthContext.Provider>
   );
-}
+} 
