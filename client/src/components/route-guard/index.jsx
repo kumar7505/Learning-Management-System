@@ -2,12 +2,20 @@ import React, { Fragment } from 'react'
 import { useLocation, Navigate } from 'react-router-dom'
 
 function RouteGuard({authenticated, user, element}){
-    console.log(authenticated, user);
     
     const location = useLocation();
 
+    console.log(authenticated, user, location);
+        
     if (!authenticated && !location.pathname.includes("/auth")) {
         return <Navigate to="/auth" />;
+    }
+
+    if (
+        authenticated &&
+        user.role === "instructor" &&
+        !location.pathname.includes("instructor")) {
+        return <Navigate to="/instructor" />;
     }
 
     if (
@@ -17,15 +25,9 @@ function RouteGuard({authenticated, user, element}){
           location.pathname.includes("/auth"))) {
         return <Navigate to="/home" />;
     }
-
-    if (
-        authenticated &&
-        user.role === "instructor" &&
-        !location.pathname.includes("instructor")) {
-        return <Navigate to="/instructor" />;
-    }
     
-      return <Fragment>{element}</Fragment>;
+    return <Fragment>{element}</Fragment>;
 }
 
 export default RouteGuard;
+

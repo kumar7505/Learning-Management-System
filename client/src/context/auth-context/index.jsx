@@ -1,72 +1,34 @@
-import { initialSignUpFormData, initialSignInFormData } from '@/config';
-import React, { createContext, useEffect, useState } from 'react'
-import { registerService, loginService, checkAuthService } from '@/services';
+import { Skeleton } from "@/components/ui/skeleton";
+import { initialSignInFormData, initialSignUpFormData } from "@/config";
+import { checkAuthService, loginService, registerService } from "@/services";
+import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext(null);
 
-function AuthProvider({children}){
-
-  const [signUpFormData, setSignUpFormData] = useState(initialSignUpFormData);
+export default function AuthProvider({ children }) {
   const [signInFormData, setSignInFormData] = useState(initialSignInFormData);
+  const [signUpFormData, setSignUpFormData] = useState(initialSignUpFormData);
   const [auth, setAuth] = useState({
     authenticate: false,
     user: null,
   });
+  const [loading, setLoading] = useState(true);
+
   async function handleRegisterUser(event) {
-    console.log("handleRegisterUser");
-    
     event.preventDefault();
-    try {
-      const data = await registerService(signUpFormData);
-      console.log("User registered successfully:", data);
-      // Optionally clear the form after successful registration
-      setSignUpFormData(initialSignUpFormData);
-    } catch (error) {
-      console.error("Registration faileda:", error.message);
-      // Handle error feedback, e.g., show an error message to the user
-    }
+    const data = await registerService(signUpFormData);
   }
 
   async function handleLoginUser(event) {
-    console.log("handleLoginUser");
-    
     event.preventDefault();
-    try {
-      const data = await loginService(signInFormData);
-      console.log("User logged in successfully:", data);
-      // Optionally clear the form after successful registration
-      setSignUpFormData(initialSignInFormData);
-      console.log(data.data.accessToken);
-      if(data.success){
-        sessionStorage.setItem(
-          "accessToken",
-          JSON.stringify(data.data.accessToken)
-        );
-        setAuth({
-          authenticate: true,
-          user: data.data.user,
-        });
-      } else {
-        setAuth({
-          authenticate: false,
-          user: null,
-        });
-      }
+    const data = await loginService(signInFormData);
+    console.log(data, "datadatadatadatadata");
 
-
-    } catch (error) {
-      console.error("logging in faileda:", error.message);
-      // Handle error feedback, e.g., show an error message to the user
-    }
-
-  }
-
-  async function checkAuthUser(){
-    console.log("checkAuthUser");
-    
-    const data = await checkAuthService();
-
-    if(data.success){
+    if (data.success) {
+      sessionStorage.setItem(
+        "accessToken",
+        JSON.stringify(data.data.accessToken)
+      );
       setAuth({
         authenticate: true,
         user: data.data.user,
@@ -75,31 +37,60 @@ function AuthProvider({children}){
       setAuth({
         authenticate: false,
         user: null,
-      }); 
+      });
     }
-    
-  console.log("kumaranjab");
-  console.log(auth);
+  }
+
+  //check auth user
+
+  async function checkAuthUser() {
+    try {
+      const data = await checkAuthService();
+      if (data.success) {
+        setAuth({
+          authenticate: true,
+          user: data.data.user,
+        });
+        setLoading(false);
+      } else {
+        setAuth({
+          authenticate: false,
+          user: null,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      if (!error?.response?.data?.success) {
+        setAuth({
+          authenticate: false,
+          user: null,
+        });
+        setLoading(false);
+      }
+    }
   }
 
 
   useEffect(() => {
     checkAuthUser();
-  }, [])
+  }, []);
 
-  
-  
+  console.log(auth, "gf");
 
-  return <AuthContext.Provider value={{
-    signInFormData,
-    setSignInFormData,
-    signUpFormData,
-    setSignUpFormData,
-    handleRegisterUser,
-    handleLoginUser,
-    auth,
-
-  }}> {children} </AuthContext.Provider>
+  return (
+    <AuthContext.Provider
+      value={{
+        signInFormData,
+        setSignInFormData,
+        signUpFormData,
+        setSignUpFormData,
+        handleRegisterUser,
+        handleLoginUser,
+        auth,
+      }}
+    >
+      {loading ? <Skeleton /> : children}
+    </AuthContext.Provider>
+  );
 }
-
-export default AuthProvider;
