@@ -19,7 +19,17 @@ const CourseCurriculum = () => {
       },
     ])
   }
-  console.log(courseCurriculumFormData);
+
+  function handleCourseTitleChange(event, currentIndex){
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    cpyCourseCurriculumFormData[currentIndex] = {
+      ...cpyCourseCurriculumFormData[currentIndex],
+      title: event.target.value,
+    };
+    console.log(cpyCourseCurriculumFormData);
+    
+    setCourseCurriculumFormData(cpyCourseCurriculumFormData)
+  }
   return (
     <Card>
       <CardHeader>
@@ -38,6 +48,7 @@ const CourseCurriculum = () => {
                     name={`title-${index+1}`}
                     placeholder="Enter Lecture Title"
                     className="max-w-96 items-center"
+                    onChange={(event) => handleCourseTitleChange(event, index)}
                   />
                   <div className="flex space-x-2">
                     <Switch 
