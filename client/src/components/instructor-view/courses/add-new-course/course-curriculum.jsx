@@ -30,6 +30,17 @@ const CourseCurriculum = () => {
     
     setCourseCurriculumFormData(cpyCourseCurriculumFormData)
   }
+
+  function handleFreePreviewChange(currentValue, currentIndex){
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    cpyCourseCurriculumFormData[currentIndex] = {
+      ...cpyCourseCurriculumFormData[currentIndex],
+      freePreview: currentValue,
+    };
+    
+    setCourseCurriculumFormData(cpyCourseCurriculumFormData)
+    
+  }
   return (
     <Card>
       <CardHeader>
@@ -49,11 +60,13 @@ const CourseCurriculum = () => {
                     placeholder="Enter Lecture Title"
                     className="max-w-96 items-center"
                     onChange={(event) => handleCourseTitleChange(event, index)}
+                    value={courseCurriculumFormData[index]?.title}
                   />
                   <div className="flex space-x-2">
                     <Switch 
-                    checked={false}
-                    id={`freePreview-${index+1}`}
+                     onCheckedChange={(value) => handleFreePreviewChange(value, index)}
+                     checked={courseCurriculumFormData[index]?.freePreview}
+                     id={`freePreview-${index+1}`}
                     />
                     <Label htmlForm={`freePreview-${index+1}`}>Free Preview</Label>
                   </div>
