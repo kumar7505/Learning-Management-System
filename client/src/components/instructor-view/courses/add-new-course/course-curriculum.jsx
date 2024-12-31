@@ -5,11 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { courseCurriculumInitialFormData } from '@/config';
 import { InstructorContext } from '@/context/instructor-context'
+import { mediaUploadService } from '@/services';
 import React, { useContext } from 'react'
 
 const CourseCurriculum = () => {
 
-  const {courseCurriculumFormData, setCourseCurriculumFormData} = useContext(InstructorContext);
+  const {courseCurriculumFormData, setCourseCurriculumFormData, mediaUploadProgress, setMediaUploadProgress } = useContext(InstructorContext);
   
   function handleNewLecture() {
     setCourseCurriculumFormData([
@@ -40,6 +41,26 @@ const CourseCurriculum = () => {
     
     setCourseCurriculumFormData(cpyCourseCurriculumFormData)
     
+  }
+
+  async function handleSingleLectureUpload(event, currentIndex){
+    console.log(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+
+    if(selectedFile) {
+      const videoFormData = new FormData();
+      videoFormData.append('file', selectedFile)
+
+      try {
+        setMediaUploadProgress(true);
+        const response = await mediaUploadService(videoFormData);
+        console.log(response, "response");
+        
+      } catch(err) {
+        console.log("kum");
+        
+      }
+    }
   }
   return (
     <Card>
@@ -75,7 +96,8 @@ const CourseCurriculum = () => {
                   <Input 
                   type="file"
                   accept="video/*"
-                  className="mb-4" />
+                  className="mb-4"
+                  onChange={(event) => handleSingleLectureUpload(event, index)} />
                 </div>
               </div>)
           })}
