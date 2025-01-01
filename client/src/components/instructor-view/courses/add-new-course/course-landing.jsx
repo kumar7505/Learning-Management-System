@@ -6,7 +6,7 @@ import React, { useContext } from 'react';
 
 const CourseLanding = () => {
 
-  const {courseLandingFormData, setCourseLandingFormData} = useContext(InstructorContext)
+  const {courseLandingFormData, setCourseLandingFormData} = useContext(InstructorContext);
   return (
     <Card>
       <CardHeader>
