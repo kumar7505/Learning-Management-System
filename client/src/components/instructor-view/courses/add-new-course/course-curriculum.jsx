@@ -49,12 +49,21 @@ const CourseCurriculum = () => {
 
     if(selectedFile) {
       const videoFormData = new FormData();
-      videoFormData.append('file', selectedFile)
-
+      videoFormData.append("file", selectedFile);
+      
       try {
         setMediaUploadProgress(true);
         const response = await mediaUploadService(videoFormData);
-        console.log(response, "response");
+        if(response.success) {
+          let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+          cpyCourseCurriculumFormData[currentIndex] = {
+            ...cpyCourseCurriculumFormData[currentIndex],
+            videoUrl: response?.data?.url,
+            public_id: response?.data?.public_id,
+          };
+          setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+          setMediaUploadProgress(false);
+        }
         
       } catch(err) {
         console.log("kum");

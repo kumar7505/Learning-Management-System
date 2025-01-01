@@ -34,8 +34,10 @@ export async function checkAuthService(){
 }
 
 export async function mediaUploadService(formData){
+    
     try {
         const { data } = await axiosInstance.post("/media/upload", formData);
+        
         return data;
     } catch (error) {
         console.error("Error uploading data:", error.response?.data || error.message);
