@@ -1,3 +1,4 @@
+import MediaProgressBar from '@/components/media-progress-bar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { InstructorContext } from '@/context/instructor-context';
@@ -6,7 +7,13 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import React, { useContext } from 'react';
 
 const CourseSettings = () => {
-  const {courseLandingFormData, setCourseLandingFormData} = useContext(InstructorContext);
+  const {courseLandingFormData, 
+    setCourseLandingFormData,    
+    mediaUploadProgress, 
+    setMediaUploadProgress, 
+    mediaUploadProgressPercentage, 
+    setMediaUploadProgressPercentage
+  } = useContext(InstructorContext);
 
   async function handleImageUploadChange(event){
     const selectedImage = event.target.files[0];
@@ -16,7 +23,8 @@ const CourseSettings = () => {
       imageFormData.append("file", selectedImage);
 
       try {
-        const response = await mediaUploadService(imageFormData);
+        setMediaUploadProgress(true);
+        const response = await mediaUploadService(imageFormData, setMediaUploadProgressPercentage);
         
         if(response.success) {
           setCourseLandingFormData({
@@ -29,14 +37,22 @@ const CourseSettings = () => {
         console.log(e);
         
       }
+      setMediaUploadProgress(false);
     }
-
   }
   return (
     <Card>
       <CardHeader>
         <CardTitle>Course Settings</CardTitle>
       </CardHeader>
+      <div className="p-4">
+        {
+          mediaUploadProgress ? 
+          <MediaProgressBar
+            isMediaUploading={mediaUploadProgress}
+            progress={mediaUploadProgressPercentage} /> : null
+        }
+      </div>
       <CardContent>
         {courseLandingFormData?.image ? (
           <img src={courseLandingFormData.image} />
