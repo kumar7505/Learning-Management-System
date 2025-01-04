@@ -24,16 +24,20 @@ router.post('/upload', upload.single('file'), async(req, res) => {
 });
 
 router.delete('/delete/:id', async(req, res) => {
+    console.log("kumar");
+    
     try {
 
         const {id} = req.params;
 
         if(!id){
+            
             return res.status(400).json({
-                succes: false,
+                success: false,
                 message: 'Asset Id is required',
             });
         }
+        
 
         await deleteMediaFromCloudinary(id);
 
@@ -43,6 +47,7 @@ router.delete('/delete/:id', async(req, res) => {
         });
 
     } catch(err) {
+        
         console.log(err);
         res.status(500).json({
             success: false, 

@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import VideoPlayer from '@/components/video-player';
 import { courseCurriculumInitialFormData } from '@/config';
 import { InstructorContext } from '@/context/instructor-context'
-import { mediaUploadService } from '@/services';
+import { mediaDeleteService, mediaUploadService } from '@/services';
 import React, { useContext } from 'react'
 
 const CourseCurriculum = () => {
@@ -80,6 +80,25 @@ const CourseCurriculum = () => {
     }
   }
 
+  async function handleReplaceVideo(currentIndex){
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    const getCurrentVideoPublicId = cpyCourseCurriculumFormData[currentIndex].public_id;
+
+    const deleteCurrentMediaResponse = await mediaDeleteService(getCurrentVideoPublicId);
+    console.log(deleteCurrentMediaResponse);
+
+    if(deleteCurrentMediaResponse?.success){
+      cpyCourseCurriculumFormData[currentIndex] = {
+        ...cpyCourseCurriculumFormData[currentIndex],
+        videoUrl: '',
+        public_id: '',
+      }
+    }
+    setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+    console.log(courseCurriculumFormData);
+    
+    
+  }
   function isCourseCurriculumFormDataValid(){
     return courseCurriculumFormData.every((item) => {
       return (item && 
@@ -89,6 +108,9 @@ const CourseCurriculum = () => {
       );
     });
   }
+
+  console.log(courseCurriculumFormData );
+  
   return (
     <Card>
       <CardHeader>
@@ -134,7 +156,7 @@ const CourseCurriculum = () => {
                         width="450px"
                         height="200px"
                       />
-                      <Button>Replave video</Button>
+                      <Button onClick={() => handleReplaceVideo(index)}>Replace video</Button>
                       <Button className="bg-red-900">Delete Lecture</Button>
                     </div> : 
                     <Input 

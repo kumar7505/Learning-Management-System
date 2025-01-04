@@ -20,8 +20,10 @@ const uploadMediaToCloudinary = async(filePath) => {
 
 const deleteMediaFromCloudinary = async(publicId) => {
     try {
-        await cloudinary.uploader.destroy(publicId);
+        const sanitizedId = publicId.split('.')[0];
+        await cloudinary.uploader.destroy(sanitizedId);
     } catch(err) {
+        console.error(`Failed to delete asset ${publicId}:`, err); 
         throw new Error("Failed to delete assets from cloud");
     }
 };
