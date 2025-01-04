@@ -119,7 +119,11 @@ const CourseCurriculum = () => {
                   {
                     courseCurriculumFormData[index]?.videoUrl ?
                     <div className="flex gap-3">
-                      <VideoPlayer url={courseCurriculumFormData[index]?.videoUrl}/>
+                      <VideoPlayer 
+                        url={courseCurriculumFormData[index]?.videoUrl}
+                        width="450px"
+                        height="200px"
+                      />
                       <Button>Replave video</Button>
                       <Button className="bg-red-900">Delete Lecture</Button>
                     </div> : 

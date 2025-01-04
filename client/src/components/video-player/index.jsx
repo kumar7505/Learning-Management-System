@@ -1,13 +1,16 @@
 import { Slider } from '@radix-ui/react-slider';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX } from 'lucide-react';
 import React, { useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
+import { Button } from '../ui/button';
+import '@radix-ui/themes/styles.css';
+
 
 const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
-  const [played, setPlayes] = useState(0);
+  const [played, setPlayed  ] = useState(0);
   const [seeking, setSeeking] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
@@ -20,14 +23,37 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
     setPlaying(!playing);
   }
 
-  function handleProgress(){}
+  function handleProgress(state){
+    if(!seeking){
+      setPlayed(state.played);
+    }
+  }
 
-  function handleRewind(){}
+  function handleRewind(){
+    playerRef?.current?.seekTo(playerRef?.current?.getCurrentTime() - 5);
+  }
 
-  function handleForward(){}
+  function handleForward(){
+    playerRef?.current?.seekTo(playerRef?.current?.getCurrentTime() + 5);
+  }
 
-  function handleToggleMute(){}
+  function handleToggleMute(){
+    setMuted(!muted);
+  }
 
+  function hanldeSeekChange(newValue){
+    setPlayed(newValue[0]);
+    setSeeking(true);
+  }
+
+  function handleSeekMouseUp(){
+    setSeeking(false);
+    playerRef.current?.seekTo(played);
+  }
+
+  function handleVolumeChange(newValue){
+    setVolume(newValue[0]);
+  }
   return (
     <div ref={playerContainerRef}
       className={`relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 ease-in-out 
@@ -43,6 +69,7 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
         volume={volume}
         muted={muted}
         onProgress={handleProgress}
+        // controls
       />
       {showControls && (
         <div
@@ -54,14 +81,14 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
             value={[played * 100]}
             max={100}
             step={0.1}
-            // onValueChange={}
-            // onValueCommit={}
-            className='w-full mb-4'
+            onValueChange={(value) => hanldeSeekChange([value[0]/100])}
+            onValueCommit={handleSeekMouseUp}
+            className='w-full mb-4 bg-red-800'
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Button
-                variant="ghost"
+                variant=""
                 size="icon"
                 onClick={handlePlayAndPause}
                 className="text-white bg-transparent hover:text-white hover:bg-gray-700">
@@ -91,10 +118,18 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
                 size="icon"
                 className="text-white bg-transparent hover:text-white hover:bg-gray-700">
                   {
-                    muted ? 
-                    <VolumeX className="h-6 w-6"/> : <Volume2 className="h-6 w-6"/>
+                    muted ? (
+                     <VolumeX className="h-6 w-6"/>
+                      ) : ( 
+                      <Volume2 className="h-6 w-6"/> )
                   }
                 </Button> 
+                <Slider
+                  value={[volume * 100]}
+                  max={100}
+                  step={1}
+                  onValueChange={(value) => handleVolumeChange(value[0]/100)}
+                />
               </div>
             </div>
         </div>
