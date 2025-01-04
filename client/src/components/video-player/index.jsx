@@ -1,8 +1,10 @@
-import { Slider } from '@radix-ui/react-slider';
-import { Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX } from 'lucide-react';
-import React, { useRef, useState } from 'react'
+
+import { Maximize, Minimize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import { Button } from '../ui/button';
+import { Slider } from '../ui/slider';
+
 import '@radix-ui/themes/styles.css';
 
 
@@ -54,11 +56,64 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
   function handleVolumeChange(newValue){
     setVolume(newValue[0]);
   }
+
+
+  function pad(string){
+    return ("0" + string).slice(-2);
+  }
+
+  function formatTime(seconds){
+    const date = new Date(seconds * 1000);
+    const hh = date.getUTCHours();
+    const mm = date.getUTCMinutes();
+    const ss = pad(date.getUTCSeconds());
+
+    if (hh) {
+      return `${hh}:${pad(mm)}:${ss}`;
+    }
+
+    return `${mm}:${ss}`;
+  }
+
+  const handleFullScreen = useCallback(() => {
+    console.log("kumar");
+    
+    if(!isFullScreen){
+      if(playerContainerRef?.current?.requestFullscreen){
+        playerContainerRef?.current?.requestFullscreen();
+      }   
+    } else {
+      if(document.exitFullscreen){
+        document.exitFullscreen();
+      }
+    }
+  }, [isFullScreen]);
+
+  function handleMouseMove(){
+    setShowControls(true);
+    clearTimeout(controlsTimeoutRef.current);
+    controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
+  }
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      setIsFullScreen(document.fullscreenElement);
+    }  
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    }
+  });
+
   return (
     <div ref={playerContainerRef}
       className={`relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 ease-in-out 
        ${isFullScreen ? 'w-screen h-screen' : ''}`}
-       style={{width, height}}>
+       style={{width, height}}
+       onMouseMove={handleMouseMove}
+       onMouseLeave={() => setShowControls(false)}>
       <ReactPlayer
         ref={playerRef}
         className="absolute top-0 left-0"
@@ -77,14 +132,19 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
             showControls ? "opacity-100" : "opacity-0"
           }`}
         >
-          <Slider
-            value={[played * 100]}
-            max={100}
-            step={0.1}
-            onValueChange={(value) => hanldeSeekChange([value[0]/100])}
-            onValueCommit={handleSeekMouseUp}
-            className='w-full mb-4 bg-red-800'
-          />
+<Slider
+  value={[played * 100]}
+  max={100}
+  step={0.1}
+  onValueChange={(value) => hanldeSeekChange([value[0] / 100])}
+  onValueCommit={handleSeekMouseUp}
+  className="relative flex items-center w-full h-4"
+>
+  <Slider.Track className="relative bg-gray-500 rounded-full grow h-1">
+    <Slider.Range className="absolute bg-blue-500 rounded-full h-full" />
+  </Slider.Track>
+  <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow focus:outline-none focus:ring" />
+</Slider>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Button
@@ -128,8 +188,29 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
                   value={[volume * 100]}
                   max={100}
                   step={1}
-                  onValueChange={(value) => handleVolumeChange(value[0]/100)}
+                  onValueChange={(value) => handleVolumeChange([value[0]/100])}
+                  className="w-24 bg-red-900"
                 />
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-white">
+                  {
+                    formatTime(played * (playerRef?.current?.getDuration() || 0)) 
+                  } / {""}
+                  {
+                    formatTime(playerRef?.current?.getDuration() || 0)
+                  }
+                </div>
+                <Button 
+                  variant="ghost"
+                  size="icon"
+                  className="text-white bg-transparent hover:text-white hover:bg-gray-700"
+                  onClick={handleFullScreen}
+                >
+                  {
+                    isFullScreen ? <Minimize className='h-6 w-6' /> : <Maximize className='h-6 w-6' />
+                  }
+                </Button>
               </div>
             </div>
         </div>
@@ -138,4 +219,4 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
   )
 }
 
-export default VideoPlayer
+export default VideoPlayer;
