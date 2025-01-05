@@ -13,7 +13,7 @@ export default function InstructorProvider({children}) {
     return (
         <InstructorContext.Provider 
          value={{
-            courseLandingFormData, 
+            courseLandingFormData,      
             setCourseLandingFormData,
             courseCurriculumFormData,
             setCourseCurriculumFormData,

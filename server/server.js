@@ -29,7 +29,7 @@ mongoose.connect(MONGO_URL)
 
 app.use('/auth', authRoutes);
 app.use('/media', mediaRoutes);
-app.use('/instructor/course', instructorCourseRoutes)
+app.use('/instructor/course', instructorCourseRoutes )
 app.use((err, req, res, next) => {
     console.log(err.stack); // Logs the error stack trace for debugging purposes
     res.status(500).json({
