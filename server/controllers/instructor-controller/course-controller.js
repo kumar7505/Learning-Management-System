@@ -72,7 +72,7 @@ const updateCourseById = async (requestAnimationFrame, res) => {
 
         const updatedCourse = await Course.findByIdAndUpdate(id, updatedCourseData, {new: true});
 
-        if(!updateCourse){
+        if(!updatedCourse){
             return res.status(404).json({
                 success: false,
                 message: 'Course Not Found',
@@ -81,7 +81,7 @@ const updateCourseById = async (requestAnimationFrame, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Updated Successfully',
+            message: 'Course Updated Successfully',
             data: updatedCourse,
         })
     } catch(e){
@@ -93,4 +93,9 @@ const updateCourseById = async (requestAnimationFrame, res) => {
     }
 };
 
-module.exports = { addNewCourse, getAllCourses, courseDetails, updateCourseById };
+module.exports = { 
+    addNewCourse, 
+    getAllCourses, 
+    getCourseDetailsById, 
+    updateCourseById 
+};
