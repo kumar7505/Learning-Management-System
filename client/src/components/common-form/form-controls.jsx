@@ -38,7 +38,7 @@ function FormControls({formControls = [], formData, setFormData}){
           value={currentControlItemValue}
           onValueChange={(event) => setFormData({
             ...formData,
-            [getControlItem.name] : event.target.value
+            [getControlItem.name] : event
           })}
           >
             <SelectTrigger className="w-full">
@@ -95,7 +95,7 @@ function FormControls({formControls = [], formData, setFormData}){
     }
   return (
     <div className="flex flex-col gap-3">
-      {console.log(formControls)}
+      {/* {console.log(formControls)} */}
       {formControls.map((controlItem) => (
         <div key={controlItem.name}>
           <Label htmlFor={controlItem.name}>{controlItem.label}</Label>

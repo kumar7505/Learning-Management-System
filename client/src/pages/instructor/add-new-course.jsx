@@ -11,7 +11,7 @@ const AddNewCoursePage = () => {
 
     const [focusedTab, setFocusedTab] = useState("curriculum");
 
-    const [courseCurriculumFormData, courseLandingFormData] = useContext(InstructorContext);
+    const {courseCurriculumFormData, courseLandingFormData} = useContext(InstructorContext);
     // Handle tab click to maintain focus
 
     const handleTabClick = (value) => {
