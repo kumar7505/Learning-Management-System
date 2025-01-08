@@ -9,6 +9,7 @@ import { InstructorContext } from '@/context/instructor-context'
 import { addNewCourseService } from '@/services'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import React, { useContext, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const AddNewCoursePage = () => {
 
@@ -20,6 +21,7 @@ const AddNewCoursePage = () => {
     const handleTabClick = (value) => {
         setFocusedTab(value);
     };
+    const navigate = useNavigate();
 
     function isEmpty(value){
         if(Array.isArray(value)){
@@ -66,6 +68,7 @@ const AddNewCoursePage = () => {
         if(response?.success){
             setCourseLandingFormData(courseLandingFormData);
             setCourseCurriculumFormData(courseCurriculumInitialFormData);
+            navigate(-1);
         }
         console.log(courseFinalFormData, "Course Final Formm Data");
         

@@ -88,8 +88,8 @@ export async function addNewCourseService(formData){
 export async function fetchInstructorCourseDetailservice(id){
     try {
         const { data } = await axiosInstance.get(`/instructor/course/details/${id}`);
+        
         return data;
-
     } catch (error) {
         console.error("Error fetching data:", error.response?.data || error.message);
         throw error; // Re-throw the error to handle it in the calling function
