@@ -1,6 +1,6 @@
 const Course = require("../../models/Course"); 
 
-const addNewCourse = async (requestAnimationFrame, res) => {
+const addNewCourse = async (req, res) => {
     try{
 
         const courseData = req.body;

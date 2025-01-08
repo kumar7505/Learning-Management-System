@@ -52,8 +52,7 @@ export async function mediaUploadService(formData, onProgressCallback){
     }
 } 
 
-export async function mediaDeleteService(id){
-    
+export async function mediaDeleteService(id){    
     try {
         const { data } = await axiosInstance.delete(`/media/delete/${id}`);
 
@@ -63,3 +62,47 @@ export async function mediaDeleteService(id){
         throw error; // Re-throw the error to handle it in the calling function
     }
 } 
+
+export async function fetchInstructorCourseListService(){
+    try {
+        const { data } = await axiosInstance.get(`/instructor/course/get`);
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+export async function addNewCourseService(formData){
+    try {
+        const { data } = await axiosInstance.post(`/instructor/course/add`, formData);
+        return data;
+
+    } catch (error) {
+        console.error("Error adding data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+export async function fetchInstructorCourseDetailservice(id){
+    try {
+        const { data } = await axiosInstance.get(`/instructor/course/details/${id}`);
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+export async function updateCourseByIdService(id, formData){
+    try {
+        const { data } = await axiosInstance.put(`/instructor/course/update/${id}`, formData);
+        return data;
+
+    } catch (error) {
+        console.error("Error updating data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}

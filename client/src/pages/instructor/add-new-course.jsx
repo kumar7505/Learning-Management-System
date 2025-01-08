@@ -3,7 +3,10 @@ import CourseLanding from '@/components/instructor-view/courses/add-new-course/c
 import CourseSettings from '@/components/instructor-view/courses/add-new-course/course-setting'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { courseCurriculumInitialFormData } from '@/config'
+import { AuthContext } from '@/context/auth-context'
 import { InstructorContext } from '@/context/instructor-context'
+import { addNewCourseService } from '@/services'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import React, { useContext, useRef, useState } from 'react'
 
@@ -11,9 +14,9 @@ const AddNewCoursePage = () => {
 
     const [focusedTab, setFocusedTab] = useState("curriculum");
 
-    const {courseCurriculumFormData, courseLandingFormData} = useContext(InstructorContext);
+    const {courseCurriculumFormData, courseLandingFormData, setCourseLandingFormData, setCourseCurriculumFormData } = useContext(InstructorContext);
     // Handle tab click to maintain focus
-
+    const {auth} = useContext(AuthContext);
     const handleTabClick = (value) => {
         setFocusedTab(value);
     };
@@ -45,11 +48,36 @@ const AddNewCoursePage = () => {
         }
         return hasFreePreview;
     }
+
+    async function handleCreateCourse(){
+        const courseFinalFormData = {
+            instructorId: auth?.user?._id,
+            instructorName: auth?.user?.userName,
+            date: new Date(),
+            ...courseLandingFormData, 
+            students: [
+            ],
+            curriculum: courseCurriculumFormData,
+            isPublished: true,
+        };
+
+        const response = await addNewCourseService(courseFinalFormData);
+
+        if(response?.success){
+            setCourseLandingFormData(courseLandingFormData);
+            setCourseCurriculumFormData(courseCurriculumInitialFormData);
+        }
+        console.log(courseFinalFormData, "Course Final Formm Data");
+        
+    }
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between">
                 <h1 className="text-3xl font-extrabold mb-5">Create a New Course</h1>
-                <Button disabled={!validateFormData()} className="text-sm tracking-wider font-bold px-8">
+                <Button 
+                  disabled={!validateFormData()} 
+                  className="text-sm tracking-wider font-bold px-8"
+                  onClick={handleCreateCourse}>
                     SUBMIT
                 </Button>
             </div>
