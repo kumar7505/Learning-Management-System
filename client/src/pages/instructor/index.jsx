@@ -15,8 +15,7 @@ const InstructorDashboardPage = () => {
     useContext(InstructorContext);
 
   async function fetchAllCourses() {
-    const response = await fetchInstructorCourseListService();
-    console.log("kumar", response);
+    const response = await fetchInstructorCourseListService(); 
 
     if (response?.success) {
       setInstructorCoursesList(response?.data);
@@ -28,7 +27,6 @@ const InstructorDashboardPage = () => {
     fetchAllCourses();
   }, []);
   
-  console.log("karthi", instructorCoursesList);
   const menuItems = [
     {
       icon: BarChart,

@@ -24,7 +24,6 @@ router.post('/upload', upload.single('file'), async(req, res) => {
 });
 
 router.delete('/delete/:id', async(req, res) => {
-    console.log("kumar");
     
     try {
 

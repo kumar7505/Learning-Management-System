@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { InstructorContext } from '@/context/instructor-context'
 import { Delete, Edit } from 'lucide-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const InstructorCourses = ({ listOfCourses }) => {
     const navigate = useNavigate();
-    // console.log(listOfCourses);
+    // const {currentEditedCourseId, setCurrentEditedCourseId} = useContext(InstructorContext)
     
   return (
     <Card>
@@ -37,7 +38,14 @@ const InstructorCourses = ({ listOfCourses }) => {
                                 <TableCell>{course?.students?.length}</TableCell>
                                 <TableCell>${course.pricing}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="ghost" size="sm" className="">
+                                    <Button 
+                                     onClick={() => {
+                                        // setCurrentEditedCourseId(course?._id);
+                                        navigate(`/instructor/edit-course/${course?._id}`);
+                                     }}
+                                     variant="ghost" 
+                                     size="sm" 
+                                     className="">
                                         <Edit className="h-6 w-6" />
                                     </Button>
                                     <Button variant="ghost" size="sm" className="">

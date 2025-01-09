@@ -8,21 +8,43 @@ import { AuthContext } from '@/context/auth-context'
 import { InstructorContext } from '@/context/instructor-context'
 import { addNewCourseService } from '@/services'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
-import React, { useContext, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const AddNewCoursePage = () => {
 
     const [focusedTab, setFocusedTab] = useState("curriculum");
 
-    const {courseCurriculumFormData, courseLandingFormData, setCourseLandingFormData, setCourseCurriculumFormData } = useContext(InstructorContext);
+    const {
+        courseCurriculumFormData, 
+        courseLandingFormData, 
+        setCourseLandingFormData, 
+        setCourseCurriculumFormData,    
+        currentEditedCourseId, 
+        setCurrentEditedCourseId
+    } = useContext(InstructorContext);
+    
     // Handle tab click to maintain focus
     const {auth} = useContext(AuthContext);
     const handleTabClick = (value) => {
         setFocusedTab(value);
     };
     const navigate = useNavigate();
+    const params = useParams();
+    
+    useEffect(() =>{
+        console.log(currentEditedCourseId);
+        
+    }, [currentEditedCourseId])
+    useEffect(() => {
+        console.log(params);
+        
+        if(params) setCurrentEditedCourseId(params?.courseId);
+        console.log(currentEditedCourseId);
+        
+    }, [params])
 
+    
     function isEmpty(value){
         if(Array.isArray(value)){
             return value.length === 0;

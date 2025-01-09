@@ -76,7 +76,6 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
   }
 
   const handleFullScreen = useCallback(() => {
-    console.log("kumar");
     
     if(!isFullScreen){
       if(playerContainerRef?.current?.requestFullscreen){
