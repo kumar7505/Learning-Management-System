@@ -28,7 +28,7 @@ const getAllCourses = async (requestAnimationFrame, res) => {
         const courseList = await Course.find({});
 
         res.status(200).json({
-            succes: true,
+            success: true,
             data: courseList,
         })
     } catch(e){

@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 
 const InstructorCourses = ({ listOfCourses }) => {
     const navigate = useNavigate();
+    // console.log(listOfCourses);
+    
   return (
     <Card>
         <CardHeader className="flex justify-between flex-row items-center">
@@ -26,7 +28,7 @@ const InstructorCourses = ({ listOfCourses }) => {
                     </TableHeader>
                     <TableBody>
                         {
-                            listOfCourses && listOfCourses > 0 ? 
+                            listOfCourses && listOfCourses.length > 0 ? 
                             listOfCourses.map(course=>
                                 <TableRow>
                                 <TableCell className="font-medium">

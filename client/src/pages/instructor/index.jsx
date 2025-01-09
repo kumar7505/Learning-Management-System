@@ -1,29 +1,34 @@
-import InstructorCourses from '@/components/instructor-view/courses';
-import InstructorDashboard from '@/components/instructor-view/dashboard';
+import InstructorCourses from "@/components/instructor-view/courses";
+import InstructorDashboard from "@/components/instructor-view/dashboard";
 import { Button } from "@/components/ui/button";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { BarChart, Book, LogOut } from "lucide-react";
-import { AuthContext } from '@/context/auth-context';
-import { fetchInstructorCourseDetailservice } from '@/services';
-import { InstructorContext } from '@/context/instructor-context';
+import { AuthContext } from "@/context/auth-context";
+import { fetchInstructorCourseListService } from "@/services";
+import { InstructorContext } from "@/context/instructor-context";
 
 const InstructorDashboardPage = () => {
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const { resetCredentials } = useContext(AuthContext);
+  const { instructorCoursesList, setInstructorCoursesList } =
+    useContext(InstructorContext);
 
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const {resetCredentials} = useContext(AuthContext);
-  const {instructorCoursesList, setInstructorCoursesList} = useContext(InstructorContext);
+  async function fetchAllCourses() {
+    const response = await fetchInstructorCourseListService();
+    console.log("kumar", response);
 
-  async function fetchAllCourses(){
-    const response = await fetchInstructorCourseDetailservice();
+    if (response?.success) {
+      setInstructorCoursesList(response?.data);
 
-    if(response?.success) setInstructorCoursesList(response?.data)
-      
-    
+      // console.log("kumar", response?.data);
+    }
   }
   useEffect(() => {
-    fetchAllCourses()
-  }, [])
+    fetchAllCourses();
+  }, []);
+  
+  console.log("karthi", instructorCoursesList);
   const menuItems = [
     {
       icon: BarChart,
@@ -35,14 +40,14 @@ const InstructorDashboardPage = () => {
       icon: Book,
       label: "Courses",
       value: "courses",
-      component: <InstructorCourses lisOfCourses={instructorCoursesList} />,
+      component: <InstructorCourses listOfCourses={instructorCoursesList} />,
     },
     {
       icon: LogOut,
       label: "Logout",
       value: "logout",
       component: null,
-    }, 
+    },
   ];
 
   function handleLogout() {
@@ -55,20 +60,21 @@ const InstructorDashboardPage = () => {
         <div className="p-4">
           <h2 className="text-2xl font-bold mb-4">Instructor View</h2>
           <nav>
-            {
-              menuItems.map(menuItem => <Button
-                  className="w-full justify-start mb-2"
-                  variant = {activeTab === menuItem.value ? "secondary" : "ghost"}
-                  onClick={
-                    menuItem.value === "logout"
-                      ? handleLogout
-                      : () => setActiveTab(menuItem.value)
-                  }
-                  key={menuItem.value}>
-                    <menuItem.icon className="mr-2 h-4 w-4"/>
-                    {menuItem.label}
-                  </Button>)
-            }
+            {menuItems.map((menuItem) => (
+              <Button
+                className="w-full justify-start mb-2"
+                variant={activeTab === menuItem.value ? "secondary" : "ghost"}
+                onClick={
+                  menuItem.value === "logout"
+                    ? handleLogout
+                    : () => setActiveTab(menuItem.value)
+                }
+                key={menuItem.value}
+              >
+                <menuItem.icon className="mr-2 h-4 w-4" />
+                {menuItem.label}
+              </Button>
+            ))}
           </nav>
         </div>
       </aside>
@@ -86,7 +92,7 @@ const InstructorDashboardPage = () => {
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default InstructorDashboardPage
+export default InstructorDashboardPage;
