@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import VideoPlayer from '@/components/video-player';
 import { courseCurriculumInitialFormData } from '@/config';
 import { InstructorContext } from '@/context/instructor-context'
-import { mediaDeleteService, mediaUploadService } from '@/services';
+import { mediaBulkUploadService, mediaDeleteService, mediaUploadService } from '@/services';
 import { Upload } from 'lucide-react';
 import React, { useContext, useRef } from 'react'
 
@@ -119,15 +119,22 @@ const CourseCurriculum = () => {
   }
 
   async function handleMediaBulkUpload(event){
-    console.log('karthi', event);
-    
     const selectedFiles = Array.from(event.target.files);
+    const bulkNewFormData = new FormData();
 
-    console.log(selectedFiles);
-    
-  }
+    selectedFiles.forEach(fileItem => bulkFormData.Append('files', fileItem));
+    try{
+      setMediaUploadProgress(true);
+        const response = await mediaBulkUploadService(bulkNewFormData, setMediaUploadProgressPercentage);
+        console.log('bulk', response);
+        
+    }catch(e){
+      console.log(e);
+      
+    }
 
   console.log(courseCurriculumFormData );
+  }
   
   return (
     <Card>
@@ -209,4 +216,4 @@ const CourseCurriculum = () => {
   )
 }
 
-export default CourseCurriculum
+export default CourseCurriculum;
