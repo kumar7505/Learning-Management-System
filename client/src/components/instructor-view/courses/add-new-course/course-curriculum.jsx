@@ -8,7 +8,8 @@ import VideoPlayer from '@/components/video-player';
 import { courseCurriculumInitialFormData } from '@/config';
 import { InstructorContext } from '@/context/instructor-context'
 import { mediaDeleteService, mediaUploadService } from '@/services';
-import React, { useContext } from 'react'
+import { Upload } from 'lucide-react';
+import React, { useContext, useRef } from 'react'
 
 const CourseCurriculum = () => {
 
@@ -20,6 +21,8 @@ const CourseCurriculum = () => {
     mediaUploadProgressPercentage, 
     setMediaUploadProgressPercentage
   } = useContext(InstructorContext);
+
+  const bulkUploadInputRef = useRef(null);
   
   function handleNewLecture() {
     setCourseCurriculumFormData([
@@ -109,12 +112,32 @@ const CourseCurriculum = () => {
     });
   }
 
+  function handleOpenBulkUploading(){
+    bulkUploadInputRef.current?.click();
+  }
+
   console.log(courseCurriculumFormData );
   
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between">
         <CardTitle>Create Course Curriculum</CardTitle>
+        <div>
+          <input type="file" 
+          ref={bulkUploadInputRef}
+          accept="video/*"
+          multiple
+          className="hidden"
+          id="bulk-media-upload" />
+          <Button
+            as="label"
+            htmlFor="bulk-media-upload"
+            variant="outline"
+            className="cursor-pointer"
+            onClick={handleOpenBulkUploading}>
+            <Upload className="w-4 h-5 mr-2" />
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent>
