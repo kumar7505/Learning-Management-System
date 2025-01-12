@@ -66,7 +66,7 @@ const getCourseDetailsById = async (req, res) => {
     }
 };
 
-const updateCourseById = async (requestAnimationFrame, res) => {
+const updateCourseById = async (req, res) => {
     try{
         const {id} = req.params;
         const updatedCourseData = req.body;

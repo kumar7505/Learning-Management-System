@@ -16,7 +16,7 @@ app.use(cors({origin: process.env.CLIENT_URL,
 }));
 
 app.use((req, res, next) => {
-    console.log('Origin:', req.headers.origin);
+    // console.log('Origin:', req.headers.origin);
     next();
 });
 

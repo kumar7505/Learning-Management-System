@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { courseCurriculumInitialFormData, courseLandingInitialFormData } from '@/config'
 import { AuthContext } from '@/context/auth-context'
 import { InstructorContext } from '@/context/instructor-context'
-import { addNewCourseService, fetchInstructorCourseDetailservice } from '@/services'
+import { addNewCourseService, fetchInstructorCourseDetailservice, updateCourseByIdService } from '@/services'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -47,18 +47,18 @@ const AddNewCoursePage = () => {
                          
         }
     }
+    useEffect(() => {
+        console.log(params);
+        
+        if(params) setCurrentEditedCourseId(params.courseId);
+        console.log(currentEditedCourseId);
+        
+    }, [params?.courseId])
     useEffect(() =>{
         if(currentEditedCourseId !== null) 
             fetchCurrentCourseDetials();
         
     }, [currentEditedCourseId])
-    useEffect(() => {
-        console.log(params);
-        
-        if(params) setCurrentEditedCourseId(params?.courseId);
-        console.log(currentEditedCourseId);
-        
-    }, [params?.courseId])
 
     
     function isEmpty(value){
@@ -101,14 +101,16 @@ const AddNewCoursePage = () => {
             isPublished: true,
         };
 
-        const response = await addNewCourseService(courseFinalFormData);
+        const response = currentEditedCourseId !== null ? 
+        await updateCourseByIdService(currentEditedCourseId, courseFinalFormData) : 
+        await addNewCourseService(courseFinalFormData);
 
         if(response?.success){
             setCourseLandingFormData(courseLandingFormData);
             setCourseCurriculumFormData(courseCurriculumInitialFormData);
             navigate(-1);
         }
-        console.log(courseFinalFormData, "Course Final Formm Data");
+        console.log( "Course Final Formm Data", courseFinalFormData);
         
     }
     return (
