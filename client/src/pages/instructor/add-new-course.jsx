@@ -43,23 +43,24 @@ const AddNewCoursePage = () => {
             }, {});
             console.log("PRAS", response?.data,  setCourseFormData );
             setCourseLandingFormData(setCourseFormData);
-            setCourseCurriculumFormData(response?.data?.curriculum)
+            setCourseCurriculumFormData(response?.data?.curriculum || [])
                          
         }
     }
-    useEffect(() => {
-        console.log(params);
-        
-        if(params) setCurrentEditedCourseId(params.courseId);
-        console.log(currentEditedCourseId);
-        
-    }, [params?.courseId])
+
+    
     useEffect(() =>{
         if(currentEditedCourseId !== null) 
             fetchCurrentCourseDetials();
         
     }, [currentEditedCourseId])
 
+    useEffect(() => {
+        
+        if(params?.courseId) setCurrentEditedCourseId(params.courseId);
+        console.log(currentEditedCourseId);
+        
+    }, [params?.courseId]);
     
     function isEmpty(value){
         if(Array.isArray(value)){

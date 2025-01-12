@@ -112,8 +112,19 @@ const CourseCurriculum = () => {
     });
   }
 
-  function handleOpenBulkUploading(){
+  function handleOpenBulkUploading(event){
+    console.log('kumar', event);
+    
     bulkUploadInputRef.current?.click();
+  }
+
+  async function handleMediaBulkUpload(event){
+    console.log('karthi', event);
+    
+    const selectedFiles = Array.from(event.target.files);
+
+    console.log(selectedFiles);
+    
   }
 
   console.log(courseCurriculumFormData );
@@ -128,14 +139,15 @@ const CourseCurriculum = () => {
           accept="video/*"
           multiple
           className="hidden"
-          id="bulk-media-upload" />
+          id="bulk-media-upload"
+          onChange={handleMediaBulkUpload} />
           <Button
             as="label"
             htmlFor="bulk-media-upload"
             variant="outline"
             className="cursor-pointer"
             onClick={handleOpenBulkUploading}>
-            <Upload className="w-4 h-5 mr-2" />
+            <Upload className="w-4 h-5 mr-2" /> Bulk Upload
           </Button>
         </div>
       </CardHeader>
