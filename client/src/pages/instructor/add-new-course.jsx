@@ -3,10 +3,10 @@ import CourseLanding from '@/components/instructor-view/courses/add-new-course/c
 import CourseSettings from '@/components/instructor-view/courses/add-new-course/course-setting'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { courseCurriculumInitialFormData } from '@/config'
+import { courseCurriculumInitialFormData, courseLandingInitialFormData } from '@/config'
 import { AuthContext } from '@/context/auth-context'
 import { InstructorContext } from '@/context/instructor-context'
-import { addNewCourseService } from '@/services'
+import { addNewCourseService, fetchInstructorCourseDetailservice } from '@/services'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -32,8 +32,24 @@ const AddNewCoursePage = () => {
     const navigate = useNavigate();
     const params = useParams();
     
+    async function fetchCurrentCourseDetials(){
+        const response = await fetchInstructorCourseDetailservice(currentEditedCourseId);
+        
+        if(response?.success){
+            const setCourseFormData = Object.keys(courseLandingInitialFormData).reduce((acc, key) => {
+                acc[key] = response?.data[key] || courseLandingInitialFormData[key];
+
+                return acc;
+            }, {});
+            console.log("PRAS", response?.data,  setCourseFormData );
+            setCourseLandingFormData(setCourseFormData);
+            setCourseCurriculumFormData(response?.data?.curriculum)
+                         
+        }
+    }
     useEffect(() =>{
-        console.log(currentEditedCourseId);
+        if(currentEditedCourseId !== null) 
+            fetchCurrentCourseDetials();
         
     }, [currentEditedCourseId])
     useEffect(() => {
@@ -42,7 +58,7 @@ const AddNewCoursePage = () => {
         if(params) setCurrentEditedCourseId(params?.courseId);
         console.log(currentEditedCourseId);
         
-    }, [params])
+    }, [params?.courseId])
 
     
     function isEmpty(value){

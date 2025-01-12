@@ -23,7 +23,7 @@ const addNewCourse = async (req, res) => {
     }
 };
 
-const getAllCourses = async (requestAnimationFrame, res) => {
+const getAllCourses = async (req, res) => {
     try{
         const courseList = await Course.find({});
 
@@ -40,9 +40,10 @@ const getAllCourses = async (requestAnimationFrame, res) => {
     }
 };
 
-const getCourseDetailsById = async (requestAnimationFrame, res) => {
+const getCourseDetailsById = async (req, res) => {
     try{
         const {id} = req.params;
+        
         const courseDetails = await Course.findById(id);
 
         if(!courseDetails){
