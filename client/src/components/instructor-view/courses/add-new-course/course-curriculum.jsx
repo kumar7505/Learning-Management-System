@@ -133,6 +133,18 @@ const CourseCurriculum = () => {
     })
   }
 
+  async function handleDeleteLecture(currentIndex){
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    const getCurrentSelectedVideoPublicId = cpyCourseCurriculumFormData[currentIndex]?.public_id;
+
+    const response = await mediaDeleteService(getCurrentSelectedVideoPublicId);
+    if(response?.success){
+      cpyCourseCurriculumFormData = cpyCourseCurriculumFormData.filter((_, index) => index !== currentIndex);
+
+      setCourseCurriculumFormData(cpyCourseCurriculumFormData)
+    }
+  }
+
   async function handleMediaBulkUpload(event){
     const selectedFiles = Array.from(event.target.files);
     const bulkFormData = new FormData();
@@ -152,7 +164,7 @@ const CourseCurriculum = () => {
             ...response?.data?.map((item, index) => ({
               videoUrl: item?.url,
               public_id: item?.public_id,
-              title: `Lecture${cpyCourseCurriculumFormData.length + index}`,
+              title: `Lecture${cpyCourseCurriculumFormData.length + index + 1}`,
               freePreview: false
             }))
           ];
@@ -231,7 +243,7 @@ const CourseCurriculum = () => {
                         height="200px"
                       />
                       <Button onClick={() => handleReplaceVideo(index)}>Replace video</Button>
-                      <Button className="bg-red-900">Delete Lecture</Button>
+                      <Button onClick={() => handleDeleteLecture(index)} className="bg-red-900">Delete Lecture</Button>
                     </div> : 
                     <Input 
                     type="file"
