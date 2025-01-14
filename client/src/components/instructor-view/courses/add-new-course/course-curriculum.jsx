@@ -118,19 +118,51 @@ const CourseCurriculum = () => {
     bulkUploadInputRef.current?.click();
   }
 
+  function areAllCourseCurriculumFormDataObjectsEmpty(arr){
+    return arr.every((obj) => {
+      return Object.entries(obj).every(([key, value]) => {
+        if(typeof value === 'boolean'){
+          console.log(98);
+          
+          return true;
+        }
+        console.log(value);
+        
+        return value === ''
+      })
+    })
+  }
+
   async function handleMediaBulkUpload(event){
     const selectedFiles = Array.from(event.target.files);
-    const bulkNewFormData = new FormData();
+    const bulkFormData = new FormData();
 
-    selectedFiles.forEach(fileItem => bulkFormData.Append('files', fileItem));
+    selectedFiles.forEach(fileItem => bulkFormData.append('files', fileItem));
     try{
       setMediaUploadProgress(true);
-        const response = await mediaBulkUploadService(bulkNewFormData, setMediaUploadProgressPercentage);
+        const response = await mediaBulkUploadService(bulkFormData, setMediaUploadProgressPercentage);
         console.log('bulk', response);
+
+        if(response?.success){
+          console.log(areAllCourseCurriculumFormDataObjectsEmpty(response?.data), 'boring');
+          let cpyCourseCurriculumFormData = areAllCourseCurriculumFormDataObjectsEmpty(courseCurriculumFormData)
+          ? [] : [...courseCurriculumFormData];
+          cpyCourseCurriculumFormData = [
+            ...cpyCourseCurriculumFormData,
+            ...response?.data?.map((item, index) => ({
+              videoUrl: item?.url,
+              public_id: item?.public_id,
+              title: `Lecture${cpyCourseCurriculumFormData.length + index}`,
+              freePreview: false
+            }))
+          ];
+          setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+          setMediaUploadProgress(false);
+          
+        }
         
     }catch(e){
       console.log(e);
-      
     }
 
   console.log(courseCurriculumFormData );

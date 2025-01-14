@@ -23,7 +23,8 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 
-mongoose.connect(MONGO_URL)
+mongoose.connect(
+    MONGO_URL)
   .then(()=>console.log('mongodb is connected'))
   .catch((e)=>console.error(e));
 
@@ -37,7 +38,7 @@ app.use((err, req, res, next) => {
         message: "Something went wrong", // Sends a generic error message to the client
     });
 });
-  
+    
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
 });
