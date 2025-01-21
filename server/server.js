@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const authRoutes = require('./routes/auth-routes/index');
 const mediaRoutes = require('./routes/instructor-routes/media-routes');
 const instructorCourseRoutes = require('./routes/instructor-routes/course-routes');
+const studentCourseRoutes = require('./routes/student-routes/course-routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,6 +32,7 @@ mongoose.connect(
 app.use('/auth', authRoutes);
 app.use('/media', mediaRoutes);
 app.use('/instructor/course', instructorCourseRoutes )
+app.use('/student/course', studentCourseRoutes )
 app.use((err, req, res, next) => {
     console.log(err.stack); // Logs the error stack trace for debugging purposes
     res.status(500).json({

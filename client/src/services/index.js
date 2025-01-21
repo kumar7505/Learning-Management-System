@@ -125,3 +125,25 @@ export async function mediaBulkUploadService(formData, onProgressCallback){
         throw error; // Re-throw the error to handle it in the calling function
     }
 } 
+
+export async function fetchStudentViewCourseListService(){
+    try {
+        const { data } = await axiosInstance.get(`/student/course/get`);
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+export async function fetchStudentViewCourseDetailstService(courseId){
+    try {
+        const { data } = await axiosInstance.get(`/student/course/get/details/${courseId}`);
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
