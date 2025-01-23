@@ -66,17 +66,12 @@ function App() {
             user={auth?.user}
           />
         }
-      />
+      >
 
-      <Route path="/" element={<StudentHomePage />} />
-      <Route path="/home" element={
-        <RouteGuard
-          element={<StudentHomePage />}
-          authenticated={auth?.authenticate}
-          user={auth?.user}
-        />
-      } />
-      <Route path="*" element={<NotFoundPage />} />
+        <Route path="" element={<StudentHomePage />} />
+        <Route path="home" element={<StudentHomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 };
