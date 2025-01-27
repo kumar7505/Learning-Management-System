@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezier and Quadratic Curves</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bezier and Quadratic Curves</h1>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Draw a quadratic curve
+        ctx.beginPath();
+        ctx.moveTo(50, 200); // Start point
+        ctx.quadraticCurveTo(150, 50, 250, 200); // Control point (150, 50), End point (250, 200)
+        ctx.strokeStyle = "blue";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Label for the quadratic curve
+        ctx.fillStyle = "blue";
+        ctx.fillText("Quadratic Curve", 100, 240);
+
+        // Draw a cubic Bezier curve
+        ctx.beginPath();
+        ctx.moveTo(300, 200); // Start point
+        ctx.bezierCurveTo(400, 50, 500, 350, 550, 200); // Control points (400, 50) and (500, 350), End point (550, 200)
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Label for the cubic Bezier curve
+        ctx.fillStyle = "red";
+        ctx.fillText("Cubic Bezier Curve", 350, 240);
+
+        // Draw control points for visualization
+        ctx.fillStyle = "black";
+
+        // Quadratic control point
+        ctx.beginPath();
+        ctx.arc(150, 50, 5, 0, 2 * Math.PI); // Control point for the quadratic curve
+        ctx.fill();
+
+        // Cubic control points
+        ctx.beginPath();
+        ctx.arc(400, 50, 5, 0, 2 * Math.PI); // First control point for cubic curve
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(500, 350, 5, 0, 2 * Math.PI); // Second control point for cubic curve
+        ctx.fill();
+    </script>
+</body>
+</html>
