@@ -5,14 +5,30 @@ import { filterOptions, sortOptions } from '@/config';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu';
 import {  } from '@radix-ui/react-label';
 import { ArrowUpDownIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { StudentContext } from '@/context/student-context';
+import { fetchStudentViewCourseListService } from '@/services';
+import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
+import { Card, CardContent } from '@/components/ui/card';
 
 const StudentViewCoursesPage = () => {
     const [sort, setSort] = useState('');
-    console.log(filterOptions);
-    const handleFilterOnChange = (keyItem, optionId) => {
-        console.log(`Filter changed for ${keyItem}: ${optionId}`);
-    };
+
+    const {
+        studentViewCoursesList,
+        setStudentViewCoursesList,
+    } = useContext(StudentContext);
+    
+    async function fetchAllStudentViewCourses(){
+        const res = await fetchStudentViewCourseListService();
+        if(res.success){
+            setStudentViewCoursesList(res?.data);
+        }
+        
+    }
+    useEffect(() => {
+        fetchAllStudentViewCourses();
+    }, []);
     
   return (
     <div className='conayiner mx-auto p-4'>
@@ -61,7 +77,38 @@ const StudentViewCoursesPage = () => {
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <span className='text-sm text-black font-bold'>10 Results</span>
                 </div>
+                <div className="space-y-4">
+    {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
+        studentViewCoursesList.map((courseItem) => (
+            <Card key={courseItem?._id} className="cursor-pointer shadow-md">
+                <CardContent className="flex gap-4 p-4">
+                    <div className="w-48 h-42 flex-shrink-0">
+                        <img
+                            src={courseItem?.image || 'https://via.placeholder.com/150'}
+                            className="w-full h-full object-cover"
+                            alt={courseItem?.title || 'Course Image'}
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <h2 className="text-xl mb-2">{courseItem?.title}</h2>
+                        Created By <span className="font-bold">{courseItem?.instructorName}</span>
+                        <p className="text-[15px] text-gray-600 mt-3 mb-2">
+                            {`${courseItem?.curriculum?.length}
+                                ${courseItem?.curriculum?.length <= 1 ? 'Lecture' : 'Lectures'} - ${courseItem?.level.toUpperCase()} Level`
+                            }
+                        </p>
+                        <p className="font-bold text-lg">${courseItem?.pricing}</p>
+                    </div>
+                </CardContent>
+            </Card>
+        ))
+    ) : (
+        <h1 className="text-lg font-medium text-center">No Courses Found</h1>
+    )}
+</div>
+
             </main>
         </div>
     </div>

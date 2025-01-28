@@ -20,7 +20,7 @@ const StudentHomePage = () => {
   }
   useEffect(() => {
     fetchAllStudentViewCourses();
-  }, [])
+  }, []);
   return (
     <div className="min-h-screen bg-white">
       <section className="flex flex-xol lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
