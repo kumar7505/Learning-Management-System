@@ -10,15 +10,61 @@ import { StudentContext } from '@/context/student-context';
 import { fetchStudentViewCourseListService } from '@/services';
 import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
 import { Card, CardContent } from '@/components/ui/card';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 
+function createSearchParamsHelper(filterParams){
+    const queryParams = [];
+
+    for (const [key, value] of Object.entries(filterParams)){
+        if(Array.isArray(value) && value.length > 0){
+            const paramValue = value.join(',');
+
+            queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
+
+        }
+    }
+    return queryParams.join('&');f
+
+}
 const StudentViewCoursesPage = () => {
-    const [sort, setSort] = useState('');
-
+    const [sort, setSort] = useState('price-lowtohigh');
+    const [filters, setFilters] = useState({});
+    const [searchParams, setSearchParams] = useSearchParams();
     const {
         studentViewCoursesList,
         setStudentViewCoursesList,
     } = useContext(StudentContext);
     
+    function handleFilterOnChange(getSectionId, getCurrentOption){
+        let cpyFilters = {...filters};
+        const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId);
+
+        console.log(indexOfCurrentSection, getSectionId);
+        if(indexOfCurrentSection === -1){
+            cpyFilters = {
+                ...cpyFilters,
+                [getSectionId] : [getCurrentOption.id]
+            }
+
+        } else {
+            const indexOfCurrentOption = cpyFilters[getSectionId].indexOf(
+                getCurrentOption.id
+            );
+            
+            if(indexOfCurrentOption === -1) {
+                cpyFilters[getSectionId].push(getCurrentOption.id);
+                
+            } else {
+                cpyFilters[getSectionId].splice(getCurrentOption, 1);
+            }
+
+        }
+
+        setFilters(cpyFilters);
+        sessionStorage.setItem('filters', JSON.stringify(cpyFilters));
+
+        
+    }
     async function fetchAllStudentViewCourses(){
         const res = await fetchStudentViewCourseListService();
         if(res.success){
@@ -26,9 +72,18 @@ const StudentViewCoursesPage = () => {
         }
         
     }
+
+    useEffect(() => {
+        const buildQueryStringFilters = createSearchParamsHelper(filters);
+        setSearchParams(new URLSearchParams(buildQueryStringFilters));
+    }, [filters]);
+
     useEffect(() => {
         fetchAllStudentViewCourses();
     }, []);
+
+    console.log(filters);
+    
     
   return (
     <div className='conayiner mx-auto p-4'>
@@ -45,8 +100,13 @@ const StudentViewCoursesPage = () => {
                                         filterOptions[keyItem].map(option => (
                                             <Label className='flex font-medium items-center gap-3'>
                                                 <Checkbox 
-                                                    checked={false}
-                                                    onCheckedChange={() => handleFilterOnChange(keyItem, option.id)} 
+                                                    checked={
+                                                        filters && 
+                                                        Object.keys(filters).length>0 &&
+                                                        filters[keyItem] &&
+                                                        filters[keyItem].indexOf(option.id) > -1 
+                                                    }
+                                                    onCheckedChange={() => handleFilterOnChange(keyItem, option)} 
                                                 />
                                                 {option.label}
                                             </Label>
