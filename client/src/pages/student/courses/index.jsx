@@ -11,6 +11,7 @@ import { fetchStudentViewCourseListService } from '@/services';
 import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
 import { Card, CardContent } from '@/components/ui/card';
 import { useSearchParams } from 'react-router-dom';
+import { Skeleton } from '@radix-ui/themes';
 
 function createSearchParamsHelper(filterParams){
     const queryParams = [];
@@ -33,6 +34,8 @@ const StudentViewCoursesPage = () => {
     const {
         studentViewCoursesList,
         setStudentViewCoursesList,
+        loadingState, 
+        setLoadingState
     } = useContext(StudentContext);
     
     function handleFilterOnChange(getSectionId, getCurrentOption){
@@ -73,6 +76,7 @@ const StudentViewCoursesPage = () => {
         const res = await fetchStudentViewCourseListService(query);
         if(res.success){
             setStudentViewCoursesList(res?.data);
+            setLoadingState(false);
         }
         
     }
@@ -81,6 +85,11 @@ const StudentViewCoursesPage = () => {
         const buildQueryStringFilters = createSearchParamsHelper(filters);
         setSearchParams(new URLSearchParams(buildQueryStringFilters));
     }, [filters]);
+
+    useEffect(() => {
+        setSort('price-lowtohigh');
+        setFilters(JSON.parse(sessionStorage.getItem('filters')) || {})
+    }, [])
 
     useEffect(() => {
         if(filters !== null && sort !== null)
@@ -94,11 +103,11 @@ const StudentViewCoursesPage = () => {
     <div className='conayiner mx-auto p-4'>
         <h1 className="text-3xl font-bold mb-4">All Courses</h1>
         <div className="flex flex-col md:flex-row gap-4">
-            <aside className="w-full md:w-64 space-y-4">
-                <div className="p-4 space-y-4">
+            <aside className="w-full md:w-64 ">
+                <div className="p-4 ">
                     {
                         Object.keys(filterOptions).map((keyItem) => (
-                            <div className="p-4 space-y-4">
+                            <div className="p-4 border-b">
                                 <h3 className='font-bold mb-3'>{keyItem.toUpperCase()}</h3>
                                 <div className="grid gap-2 mt-2">
                                     {
@@ -142,9 +151,12 @@ const StudentViewCoursesPage = () => {
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <span className='text-sm text-black font-bold'>10 Results</span>
+                    <span className='text-sm text-black font-bold'>{studentViewCoursesList.length} Results</span>
                 </div>
                 <div className="space-y-4">
+                    {
+                        loadingState && <Skeleton />
+                    }
     {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
         studentViewCoursesList.map((courseItem) => (
             <Card key={courseItem?._id} className="cursor-pointer shadow-md">
@@ -169,8 +181,10 @@ const StudentViewCoursesPage = () => {
                 </CardContent>
             </Card>
         ))
+    ) : loadingState ? (
+         <Skeleton />
     ) : (
-        <h1 className="text-lg font-medium text-center">No Courses Found</h1>
+        <h1 className="text-3xl font-medium text-center">No Courses Found</h1>
     )}
 </div>
 

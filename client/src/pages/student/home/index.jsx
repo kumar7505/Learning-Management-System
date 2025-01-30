@@ -8,12 +8,14 @@ const StudentHomePage = () => {
   const {
     studentViewCoursesList,
     setStudentViewCoursesList,
+    loadingState, 
+    setLoadingState
   } = useContext(StudentContext);
 
 
   async function fetchAllStudentViewCourses(){
     const res = await fetchStudentViewCourseListService();
-    if(res.success){
+    if(res?.success){
       setStudentViewCoursesList(res?.data);
     }
     
@@ -68,7 +70,7 @@ const StudentHomePage = () => {
               </div>
             ) 
             :
-            ( <h1>No Courses Found</h1> )
+            ( <h1 className='font-bold text-5xl'>No Courses Found</h1> )
           }
         </div>
       </section>

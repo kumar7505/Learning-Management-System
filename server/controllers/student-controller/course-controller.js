@@ -13,8 +13,7 @@ const getAllStudentViewCourses = async(req, res) => {
           let filters = {};
           if(category.length ){
             filters.category = {$in : category.split(',')}
-        console.log('karthi');
-    }
+          }
           if(level.length ){
             filters.level = {$in : level.split(',')}
           }
