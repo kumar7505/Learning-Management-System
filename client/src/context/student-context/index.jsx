@@ -12,3 +12,4 @@ export default function StudentProvider({children}){
           }}>{children}</StudentContext.Provider>
     )
 }
+

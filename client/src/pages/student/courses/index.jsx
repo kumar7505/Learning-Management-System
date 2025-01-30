@@ -10,7 +10,7 @@ import { StudentContext } from '@/context/student-context';
 import { fetchStudentViewCourseListService } from '@/services';
 import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
 import { Card, CardContent } from '@/components/ui/card';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 function createSearchParamsHelper(filterParams){
     const queryParams = [];
@@ -65,8 +65,12 @@ const StudentViewCoursesPage = () => {
 
         
     }
-    async function fetchAllStudentViewCourses(){
-        const res = await fetchStudentViewCourseListService();
+    async function fetchAllStudentViewCourses(filters, sort){
+        const query = new  URLSearchParams({
+            ...filters, 
+            sortBy: sort,
+        })
+        const res = await fetchStudentViewCourseListService(query);
         if(res.success){
             setStudentViewCoursesList(res?.data);
         }
@@ -79,8 +83,9 @@ const StudentViewCoursesPage = () => {
     }, [filters]);
 
     useEffect(() => {
-        fetchAllStudentViewCourses();
-    }, []);
+        if(filters !== null && sort !== null)
+            fetchAllStudentViewCourses(filters, sort);
+    }, [filters, sort]);
 
     console.log(filters);
     
