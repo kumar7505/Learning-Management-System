@@ -200,7 +200,7 @@ const StudentViewCourseDetailsPage = () => {
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">
-          <div className="aspect-video md-4 rounded-lg flex items-center justify-center">
+          <div className="aspect-video mb-2 rounded-lg flex items-center justify-center">
                 <VideoPlayer 
                   url={
                     displayCurrentVideoFreePreview
@@ -211,7 +211,10 @@ const StudentViewCourseDetailsPage = () => {
         </div>
         <div className='flex flex-col gap-2'>
           {
-            studentViewCourseDetails?.curriculum?.filter(item => item.freePreview).map(filteredItem => <p className='cursor-poniter text-[16px] font-medium'>{filteredItem?.title}</p>)
+            studentViewCourseDetails?.curriculum?.filter(item => item.freePreview).map(filteredItem => 
+              <p onClick={() => handleSetFreePreview(filteredItem)} className='cursor-pointer text-[16px] font-medium'>
+                {filteredItem?.title}
+              </p>)
           }
         </div>
         <DialogFooter className="sm:justify-start">
