@@ -10,11 +10,13 @@ import { StudentContext } from '@/context/student-context';
 import { fetchStudentViewCourseListService } from '@/services';
 import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
 import { Card, CardContent } from '@/components/ui/card';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@radix-ui/themes';
+
 
 function createSearchParamsHelper(filterParams){
     const queryParams = [];
+
 
     for (const [key, value] of Object.entries(filterParams)){
         if(Array.isArray(value) && value.length > 0){
@@ -24,10 +26,12 @@ function createSearchParamsHelper(filterParams){
 
         }
     }
-    return queryParams.join('&');f
+    return queryParams.join('&');
 
 }
 const StudentViewCoursesPage = () => {
+    const navigate = useNavigate();
+
     const [sort, setSort] = useState('price-lowtohigh');
     const [filters, setFilters] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
@@ -107,7 +111,7 @@ const StudentViewCoursesPage = () => {
                 <div className="p-4 ">
                     {
                         Object.keys(filterOptions).map((keyItem) => (
-                            <div className="p-4 border-b">
+                            <div className="p-4 border-b" key={keyItem}>
                                 <h3 className='font-bold mb-3'>{keyItem.toUpperCase()}</h3>
                                 <div className="grid gap-2 mt-2">
                                     {
@@ -157,36 +161,36 @@ const StudentViewCoursesPage = () => {
                     {
                         loadingState && <Skeleton />
                     }
-    {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
-        studentViewCoursesList.map((courseItem) => (
-            <Card key={courseItem?._id} className="cursor-pointer shadow-md">
-                <CardContent className="flex gap-4 p-4">
-                    <div className="w-48 h-42 flex-shrink-0">
-                        <img
-                            src={courseItem?.image || 'https://via.placeholder.com/150'}
-                            className="w-full h-full object-cover"
-                            alt={courseItem?.title || 'Course Image'}
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <h2 className="text-xl mb-2">{courseItem?.title}</h2>
-                        Created By <span className="font-bold">{courseItem?.instructorName}</span>
-                        <p className="text-[15px] text-gray-600 mt-3 mb-2">
-                            {`${courseItem?.curriculum?.length}
-                                ${courseItem?.curriculum?.length <= 1 ? 'Lecture' : 'Lectures'} - ${courseItem?.level.toUpperCase()} Level`
-                            }
-                        </p>
-                        <p className="font-bold text-lg">${courseItem?.pricing}</p>
-                    </div>
-                </CardContent>
-            </Card>
-        ))
-    ) : loadingState ? (
-         <Skeleton />
-    ) : (
-        <h1 className="text-3xl font-medium text-center">No Courses Found</h1>
-    )}
-</div>
+                    {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
+                        studentViewCoursesList.map((courseItem) => (
+                            <Card key={courseItem?._id} onClick={() => navigate(`/course/details/${courseItem?._id}`)} className="cursor-pointer shadow-md">
+                                <CardContent className="flex gap-4 p-4">
+                                    <div className="w-48 h-42 flex-shrink-0">
+                                        <img
+                                            src={courseItem?.image || 'https://via.placeholder.com/150'}
+                                            className="w-full h-full object-cover"
+                                            alt={courseItem?.title || 'Course Image'}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h2 className="text-xl mb-2">{courseItem?.title}</h2>
+                                        Created By <span className="font-bold">{courseItem?.instructorName}</span>
+                                        <p className="text-[15px] text-gray-600 mt-3 mb-2">
+                                            {`${courseItem?.curriculum?.length}
+                                                ${courseItem?.curriculum?.length <= 1 ? 'Lecture' : 'Lectures'} - ${courseItem?.level.toUpperCase()} Level`
+                                            }
+                                        </p>
+                                        <p className="font-bold text-lg">${courseItem?.pricing}</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : loadingState ? (
+                        <Skeleton />
+                    ) : (
+                        <h1 className="text-3xl font-medium text-center">No Courses Found</h1>
+                    )}
+                </div>
 
             </main>
         </div>
