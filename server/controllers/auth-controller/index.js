@@ -18,6 +18,8 @@ const registerUser = async(req, res) => {
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
+        console.log((hashPassword));
+        
         const newUser = new User({userName, userEmail, role, password: hashPassword})
 
         await newUser.save();
@@ -54,7 +56,7 @@ const loginUser = async (req, res) => {
           userEmail: checkUser.userEmail,
           role: checkUser.role,
         },
-        "JWT_SECRET",
+        process.env.JWT_SECRET,
         { expiresIn: "120m" } 
     );
 
