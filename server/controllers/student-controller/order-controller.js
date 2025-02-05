@@ -4,24 +4,25 @@ const Course = require('../../models/Course');
 const studentCourses = require('../../models/StudentCourses');
 const StudentCourses = require('../../models/StudentCourses');
 
-const createOrder = async(req, res) => {
+const createOrder = async (req, res) => {
     try {
         const {
-            userId ,
-            userName ,
-            userEmail ,
-            orderStatus ,
-            paymentMethod ,
-            paymentStatus ,
-            orderDate ,
-            paymentId ,
-            payerId ,
-            instructorId ,
-            instructorName ,
-            courseImage ,
-            courseTitle ,
-            courseId ,
-            coursePricing ,
+            userId,
+            userName,
+            userEmail,
+            orderStatus,
+            paymentMethod,
+            paymentStatus,
+            orderDate,
+            paymentId,
+            payerId,
+            instructorId,
+            instructorName,
+            courseImage,
+            courseTitle,
+            courseId,
+            coursePricing,
+            currency = 'USD',
         } = req.body;
 
         const create_payment_json = {
@@ -36,13 +37,15 @@ const createOrder = async(req, res) => {
             transactions: [
                 {
                     item_list: {
-                        items: {
-                            name: courseTitle,
-                            sku: courseId,
-                            price: coursePricing,
-                            currency: 'USD',
-                            quantity: 1,
-                        }
+                        items: [
+                            {
+                                name: courseTitle,
+                                sku: courseId,
+                                price: coursePricing.toFixed(2),
+                                currency: 'USD',
+                                quantity: 1,
+                            }
+                        ]
                     },
                     amount: {   
                         currency: 'USD',
@@ -51,55 +54,60 @@ const createOrder = async(req, res) => {
                     description: courseTitle,
                 }
             ]
-        }
+        };
 
-        paypal.payment.create(create_payment_json, async(error, paymentInfo) => {
-            if(error){
-                console.log(error);
-                return res.status(500).json({
-                    success: false,
-                    message: 'Error while creating paypal payment',
-                })
-            } else {
-                const newlyCreatedCourseOrder = new Order({
-                    userId ,
-                    userName ,
-                    userEmail ,
-                    orderStatus ,
-                    paymentMethod ,
-                    paymentStatus ,
-                    orderDate ,
-                    paymentId ,
-                    payerId ,
-                    instructorId ,
-                    instructorName ,
-                    courseImage ,
-                    courseTitle ,
-                    courseId ,
-                    coursePricing ,
-                })
-                await newlyCreatedCourseOrder.save();
+        console.log(req.body);
 
-                const approveUrl = paymentInfo.links.find(link => link.rel == 'approve_url').href;
-                
-                res.status(201).json({
-                    success: true,
-                    data: {
-                        approveUrl,
-                        orderId: newlyCreatedCourseOrder._id
-                    }
-                })
+        // Handle PayPal Payment Creation with a Promise
+        const createPaypalPayment = () => {
+            return new Promise((resolve, reject) => {
+                paypal.payment.create(create_payment_json, (error, paymentInfo) => {
+                    if (error) reject(error);
+                    else resolve(paymentInfo);
+                });
+            });
+        };
 
+        const paymentInfo = await createPaypalPayment();
+
+        const newlyCreatedCourseOrder = new Order({
+            userId,
+            userName,
+            userEmail,
+            orderStatus,
+            paymentMethod,
+            paymentStatus,
+            orderDate,
+            paymentId,
+            payerId,
+            instructorId,
+            instructorName,
+            courseImage,
+            courseTitle,
+            courseId,
+            coursePricing,
+        });
+
+        await newlyCreatedCourseOrder.save();
+
+        const approveUrl = paymentInfo.links.find(link => link.rel === 'approval_url')?.href;
+
+        res.status(201).json({
+            success: true,
+            data: {
+                approveUrl,
+                orderId: newlyCreatedCourseOrder._id
             }
-        })
-    } catch(e) {
+        });
+
+    } catch (e) {
         console.log(e);
         res.status(500).json({
             success: false,
-            message: "some error occurred",
-        })
+            message: "Some error occurred",
+        });
     }
-}
+};  
 
 const capturePaymentAndFinalizeOrder = async(req, res) => {
     try {

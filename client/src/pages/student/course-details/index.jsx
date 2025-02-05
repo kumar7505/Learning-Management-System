@@ -1,5 +1,5 @@
 import StudentProvider, { StudentContext } from '@/context/student-context'
-import { fetchStudentViewCourseDetailsService } from '@/services';
+import { createPaymentService, fetchStudentViewCourseDetailsService } from '@/services';
 import { Skeleton } from '../../../components/ui/skeleton';
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { AuthContext } from '@/context/auth-context';
 
 
 const StudentViewCourseDetailsPage = () => {
@@ -33,9 +34,10 @@ const StudentViewCourseDetailsPage = () => {
     setLoadingState,
   } = useContext(StudentContext);
 
+  const {auth} = useContext(AuthContext);
   const [displayCurrentVideoFreePreview, setDisplayCurrentVideoFreePreview] = useState(null)
   const [showFreePreviewDialog, setShowFreePreviewDialog] = useState(false)
-  
+  const [approvalUrl, setApprovalUrl] = useState('');
   async function fetchStudentViewCourseDetails(){
     const res = await fetchStudentViewCourseDetailsService(currentCourseDetailsId);
     console.log(res);
@@ -50,6 +52,43 @@ const StudentViewCourseDetailsPage = () => {
 
     if(loadingState) return <Skeleton />
     console.log('kumar',studentViewCourseDetails?.objectives);
+  }
+
+  if(approvalUrl !== ''){
+    console.log(approvalUrl);
+    window.location.href = approvalUrl;
+  }
+  console.log(studentViewCourseDetails);
+
+  async function handleCreatePayment() {
+    
+    const paymentPayload = {
+      userId: auth?.user?._id,
+      userName: auth?.user?.userName,
+      userEmail: auth?.user?.userEmail,
+      orderStatus: 'pending',
+      paymentMethod: 'paypal',
+      paymentStatus: 'indicated' ,
+      orderDate: new Date() ,
+      paymentId: '' ,
+      payerId: '' ,
+      instructorId: studentViewCourseDetails?.instructorId ,
+      instructorName: studentViewCourseDetails?.instructorName ,
+      courseImage: studentViewCourseDetails?.image ,
+      courseTitle: studentViewCourseDetails?.title ,
+      courseId: studentViewCourseDetails?._id ,
+      coursePricing: studentViewCourseDetails?.pricing ,
+    }
+
+    console.log(paymentPayload);
+    const res = await createPaymentService(paymentPayload)
+    
+    if(res.success){
+      sessionStorage.setItem('currentOrderId', JSON.stringify?.data?.orderId);
+      console.log(res?.data?.approveUrl);
+      
+      setApprovalUrl(res?.data?.approveUrl);
+    }
   }
 
   function handleSetFreePreview(getCurrentVideoInfo){
@@ -181,7 +220,7 @@ const StudentViewCourseDetailsPage = () => {
                   height="350px" />
               </div>
               <div className="m-4"><span className='text-3xl font-bold'>${studentViewCourseDetails?.pricing}</span></div>
-              <Button className='w-full'>Buy Now</Button>
+              <Button onClick={handleCreatePayment} className='w-full'>Buy Now</Button>
             </CardContent>
           </Card>
         </aside>

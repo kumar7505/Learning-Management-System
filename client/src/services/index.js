@@ -147,3 +147,25 @@ export async function fetchStudentViewCourseDetailsService(courseId){
         throw error; // Re-throw the error to handle it in the calling function
     }
 }
+
+export async function createPaymentService(formData){
+    try {
+        const { data } = await axiosInstance.post(`/student/order/create`, formData);
+        return data;
+
+    } catch (error) {
+        console.error("Error adding data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+export async function captureAndFinalizePaymentService(formData){
+    try {
+        const { data } = await axiosInstance.post(`/student/order/capture`, formData);
+        return data;
+
+    } catch (error) {
+        console.error("Error adding data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}

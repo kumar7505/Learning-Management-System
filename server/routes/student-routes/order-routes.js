@@ -1,8 +1,9 @@
 const express = require('express');
 
-const {createOrder, capturePaymentAndFinalizeOrder} = require('../../conrollers/student-controller/order-conroller')
+// const {createOrder, capturePaymentAndFinalizeOrder} = require('../../controllers/student-controller/order-controller')
+const {createOrder, capturePaymentAndFinalizeOrder} = require("../../controllers/student-controller/order-controller")
 
-const router = express.router();
+const router = express.Router();
 
 router.post('/create', createOrder);
 router.post('/capture', capturePaymentAndFinalizeOrder);
