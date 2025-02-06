@@ -159,9 +159,13 @@ export async function createPaymentService(formData){
     }
 }
 
-export async function captureAndFinalizePaymentService(formData){
+export async function captureAndFinalizePaymentService(paymentId, payerId, orderId ){
+    console.log(payerId,'kumar');
+    
     try {
-        const { data } = await axiosInstance.post(`/student/order/capture`, formData);
+        const { data } = await axiosInstance.post(`/student/order/capture`, {
+            paymentId, payerId, orderId 
+        });
         return data;
 
     } catch (error) {

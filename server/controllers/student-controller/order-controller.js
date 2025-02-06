@@ -112,10 +112,11 @@ const createOrder = async (req, res) => {
 const capturePaymentAndFinalizeOrder = async(req, res) => {
     try {
 
-        const [paymentId, payerId, orderId] = req.body;
+        const {paymentId, payerId, orderId} = req.body;
 
         let order = await Order.findById(orderId);
-
+        console.log(order);
+        
         if(!order){
             return res.status(404).json({
                 success: false,
@@ -124,7 +125,7 @@ const capturePaymentAndFinalizeOrder = async(req, res) => {
         }
 
         order.paymentStatus = 'paid';
-        order.orderStatus = 'conformed';
+        order.orderStatus = 'confirmed';
         order.paymentId = paymentId;
         order.payerId = payerId;
         

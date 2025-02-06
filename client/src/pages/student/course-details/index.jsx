@@ -84,7 +84,7 @@ const StudentViewCourseDetailsPage = () => {
     const res = await createPaymentService(paymentPayload)
     
     if(res.success){
-      sessionStorage.setItem('currentOrderId', JSON.stringify?.data?.orderId);
+      sessionStorage.setItem('currentOrderId', JSON.stringify(res?.data?.orderId));
       console.log(res?.data?.approveUrl);
       
       setApprovalUrl(res?.data?.approveUrl);
