@@ -1,7 +1,6 @@
 const paypal = require('../../helpers/paypal');
 const Order = require('../../models/Order');
 const Course = require('../../models/Course');
-const studentCourses = require('../../models/StudentCourses');
 const StudentCourses = require('../../models/StudentCourses');
 
 const createOrder = async (req, res) => {
@@ -148,7 +147,7 @@ const capturePaymentAndFinalizeOrder = async(req, res) => {
             await studentCourses.save();
         } else {
             const newStudentCourses = new StudentCourses({
-                useerId: order.userId,
+                userId: order.userId,
                 courses: [
                     {
                         courseId: order.courseId,

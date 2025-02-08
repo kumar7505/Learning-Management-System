@@ -173,3 +173,15 @@ export async function captureAndFinalizePaymentService(paymentId, payerId, order
         throw error; // Re-throw the error to handle it in the calling function
     }
 }
+
+
+export async function fetchStudentBoughtCourseDetailsService(studentId){
+    try {
+        const { data } = await axiosInstance.get(`/student/courses-bought/get/${studentId}`);
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}

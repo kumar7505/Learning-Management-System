@@ -12,7 +12,7 @@ import AddNewCoursePage from './pages/instructor/add-new-course';
 import StudentViewCoursesPage from './pages/student/courses';
 import StudentViewCourseDetailsPage from './pages/student/course-details';
 import PaypalPaymentReturnPage from './pages/student/payment-return';
-import StudentCoursePage from './pages/student/payment-return/my-courses';
+import StudentCoursePage from './pages/student/student-courses';
 function App() {
   const { auth } = useContext(AuthContext);
   return (

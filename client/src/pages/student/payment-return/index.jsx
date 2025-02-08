@@ -21,7 +21,7 @@ const PaypalPaymentReturnPage = () => {
                 )
                 if(res?.success){
                     sessionStorage.removeItem('currentOrderId');
-                    window.location.href = '/my-courses';
+                    window.location.href = '/student-courses';
                 }
             }
             capturePayment();
