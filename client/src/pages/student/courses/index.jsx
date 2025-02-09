@@ -7,11 +7,12 @@ import {  } from '@radix-ui/react-label';
 import { ArrowUpDownIcon } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { StudentContext } from '@/context/student-context';
-import { fetchStudentViewCourseListService } from '@/services';
+import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } from '@/services';
 import { cardPropDefs } from '@radix-ui/themes/dist/cjs/components/card.props';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@radix-ui/themes';
+import { AuthContext } from '@/context/auth-context';
 
 
 function createSearchParamsHelper(filterParams){
@@ -31,7 +32,7 @@ function createSearchParamsHelper(filterParams){
 }
 const StudentViewCoursesPage = () => {
     const navigate = useNavigate();
-
+    const {auth} = useContext(AuthContext);
     const [sort, setSort] = useState('price-lowtohigh');
     const [filters, setFilters] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
@@ -82,6 +83,20 @@ const StudentViewCoursesPage = () => {
             setStudentViewCoursesList(res?.data);
             setLoadingState(false);
         }
+        
+    }
+
+     async function handleCourseNavigate(getCurrentCourseId) {
+        const res = await checkCoursePurchaseInfoService(getCurrentCourseId, auth?.user?._id);
+
+        if(res?.success){
+            if(res?.data){
+                navigate(`/course-progress/${getCurrentCourseId}`);
+            } else {
+                navigate(`/course/details/${getCurrentCourseId}`);
+            }
+        }
+        console.log(res, 'courseNavigate');
         
     }
 
@@ -163,7 +178,7 @@ const StudentViewCoursesPage = () => {
                     }
                     {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
                         studentViewCoursesList.map((courseItem) => (
-                            <Card key={courseItem?._id} onClick={() => navigate(`/course/details/${courseItem?._id}`)} className="cursor-pointer shadow-md">
+                            <Card key={courseItem?._id} onClick={() => handleCourseNavigate(courseItem?._id)} className="cursor-pointer shadow-md">
                                 <CardContent className="flex gap-4 p-4">
                                     <div className="w-48 h-42 flex-shrink-0">
                                         <img

@@ -38,8 +38,11 @@ const StudentViewCourseDetailsPage = () => {
   const [displayCurrentVideoFreePreview, setDisplayCurrentVideoFreePreview] = useState(null)
   const [showFreePreviewDialog, setShowFreePreviewDialog] = useState(false)
   const [approvalUrl, setApprovalUrl] = useState('');
+
   async function fetchStudentViewCourseDetails(){
-    const res = await fetchStudentViewCourseDetailsService(currentCourseDetailsId);
+    const res = await fetchStudentViewCourseDetailsService(
+      currentCourseDetailsId,
+    );
     console.log(res);
 
     if(res?.success){
@@ -53,6 +56,8 @@ const StudentViewCourseDetailsPage = () => {
     if(loadingState) return <Skeleton />
     console.log('kumar',studentViewCourseDetails?.objectives);
   }
+
+
 
   if(approvalUrl !== ''){
     console.log(approvalUrl);
@@ -110,11 +115,12 @@ const StudentViewCourseDetailsPage = () => {
   
   useEffect(() => {
     if(!location.pathname.includes("course/details")){
-      setStudentViewCourseDetails(null)
-      setCurrentCourseDetailsId(null)
+      setStudentViewCourseDetails(null);
+      setCurrentCourseDetailsId(null);
     }
-  })
-  if(loadingState) return <Skeleton />
+  });
+  
+  if(loadingState) return <Skeleton /> 
 
   const getIndexOfFreePreviewUrl = studentViewCourseDetails !== null ? 
   studentViewCourseDetails?.curriculum?.findIndex((item) => item.freePreview) : -1; 

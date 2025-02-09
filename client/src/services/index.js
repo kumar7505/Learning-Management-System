@@ -148,6 +148,17 @@ export async function fetchStudentViewCourseDetailsService(courseId){
     }
 }
 
+export async function checkCoursePurchaseInfoService(courseId, studentId){
+    try {
+        const { data } = await axiosInstance.get(`/student/course/purchase-info/${courseId}/${studentId}`);    
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
 export async function createPaymentService(formData){
     try {
         const { data } = await axiosInstance.post(`/student/order/create`, formData);
@@ -185,3 +196,5 @@ export async function fetchStudentBoughtCourseDetailsService(studentId){
         throw error; // Re-throw the error to handle it in the calling function
     }
 }
+
+

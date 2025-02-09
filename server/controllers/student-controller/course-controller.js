@@ -1,8 +1,8 @@
 const Course = require("../../models/Course");
+const StudentCourses = require('../../models/StudentCourses');
 
 const getAllStudentViewCourses = async(req, res) => {
     try {
-        
         const {
             category = [],
             level = [],
@@ -63,7 +63,7 @@ const getStudentViewCourseDetails = async(req, res) => {
     try {
         const {id} = req.params;
         const courseDetails = await Course.findById(id);
-
+        
         if(!courseDetails){
             return res.status(404).json({
                 success : false,
@@ -72,9 +72,14 @@ const getStudentViewCourseDetails = async(req, res) => {
             })
         }
 
+        console.log(courseDetails);
+        
+        
+
         res.status(200).json({
-            success : true,
-            data : courseDetails
+            success : true, 
+            data : courseDetails,
+            // co ursePurchasedId: ifStudentAlreadyBoughtCurrentCourse ? id : null,
         })
 
 
@@ -88,4 +93,25 @@ const getStudentViewCourseDetails = async(req, res) => {
     }
 };
 
-module.exports = {getAllStudentViewCourses, getStudentViewCourseDetails};
+const checkCoursePurchaseInfo = async(req, res) => {
+    try {
+        const {id, studentId} = req.params;
+        const courseDetails = await Course.findById(id);
+        const studentCourses = await StudentCourses.findOne({
+            userId: studentId,
+        })
+        const ifStudentAlreadyBoughtCurrentCourse = studentCourses.courses.findIndex(item => item?.courseId === id) > -1;
+
+        res.status(200).json({
+            success : true, 
+            data: ifStudentAlreadyBoughtCurrentCourse,
+        })
+    } catch(e)       {
+        console.log(e);
+        res.status(500).json({
+            success: false,
+            message: 'Some error Occurred',
+        })}
+}
+
+module.exports = {getAllStudentViewCourses, getStudentViewCourseDetails, checkCoursePurchaseInfo};
