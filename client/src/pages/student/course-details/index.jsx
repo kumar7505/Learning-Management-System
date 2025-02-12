@@ -1,8 +1,8 @@
 import StudentProvider, { StudentContext } from '@/context/student-context'
-import { createPaymentService, fetchStudentViewCourseDetailsService } from '@/services';
+import { checkCoursePurchaseInfoService, createPaymentService, fetchStudentViewCourseDetailsService } from '@/services';
 import { Skeleton } from '../../../components/ui/skeleton';
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CheckCircle, Copy, Globe, Lock, PlayCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { courseCurriculumInitialFormData } from '@/config';
@@ -38,12 +38,18 @@ const StudentViewCourseDetailsPage = () => {
   const [displayCurrentVideoFreePreview, setDisplayCurrentVideoFreePreview] = useState(null)
   const [showFreePreviewDialog, setShowFreePreviewDialog] = useState(false)
   const [approvalUrl, setApprovalUrl] = useState('');
-
+  const navigate = useNavigate();
   async function fetchStudentViewCourseDetails(){
+    const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(currentCourseDetailsId, auth?.user._id);
+    if(checkCoursePurchaseInfoResponse?.success  && checkCoursePurchaseInfoResponse?.data){
+      navigate(`/course-progress/${currentCourseDetailsId}`);
+      return 
+    }
+    
     const res = await fetchStudentViewCourseDetailsService(
       currentCourseDetailsId,
     );
-    console.log(res);
+    console.log(res, 'resku');
 
     if(res?.success){
       setStudentViewCourseDetails(res?.data);
@@ -106,6 +112,8 @@ const StudentViewCourseDetailsPage = () => {
   }, [displayCurrentVideoFreePreview])
   useEffect(() => {
     if(currentCourseDetailsId !== null)
+      console.log('fetchStudentViewCourseDetails');
+      
       fetchStudentViewCourseDetails()
   }, [currentCourseDetailsId]);
 
@@ -113,7 +121,7 @@ const StudentViewCourseDetailsPage = () => {
     if(params?.id) setCurrentCourseDetailsId(params?.id)
   }, [params?.id]);
   
-  useEffect(() => {
+  useEffect(() => {0
     if(!location.pathname.includes("course/details")){
       setStudentViewCourseDetails(null);
       setCurrentCourseDetailsId(null);
