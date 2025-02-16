@@ -207,3 +207,34 @@ export async function getCurrentCourseProgressService(userId,  courseId){
         throw error; // Re-throw the error to handle it in the calling function
     }
 }
+
+
+export async function markLectureAsViewed(userId, courseId, lectureId){
+    try {
+        const { data } = await axiosInstance.post(`/student/course-progress/mark-lecture-viewed`, {
+            userId,
+            courseId,
+            lectureId
+        });    
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+
+export async function resetCourseProgreessService(userId,  courseId){
+    try {
+        const { data } = await axiosInstance.post(`/student/course-progress/reset-progress`, {
+            userId, courseId
+        });    
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+

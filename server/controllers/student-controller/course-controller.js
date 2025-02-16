@@ -70,9 +70,7 @@ const getStudentViewCourseDetails = async(req, res) => {
                 message : 'No course details found',
                 data : [],
             })
-        }
-
-        
+        }        
         
 
         res.status(200).json({

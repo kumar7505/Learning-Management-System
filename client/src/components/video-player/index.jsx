@@ -8,7 +8,7 @@ import { Slider } from '../ui/slider';
 import '@radix-ui/themes/styles.css';
 
 
-const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
+const VideoPlayer = ({ width = "100%", height = "100%", url, onProgressUpdate, progressData}) => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
@@ -104,16 +104,26 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
     return () => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    if(played == 1){ 
+      onProgressUpdate({
+        ...progressData,
+        progressValue: played,
+      })
+    }
+  }, [played])
 
   return (
-    <div ref={playerContainerRef}
+    <div ref={playerContainerRef} 
+      onClick={handlePlayAndPause}
       className={`relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 ease-in-out 
        ${isFullScreen ? 'w-screen h-screen' : ''}`}
        style={{width, height}}
        onMouseMove={handleMouseMove}
        onMouseLeave={() => setShowControls(false)}>
-      <ReactPlayer
+      <ReactPlayer onClick={(e) => e.stopPropagation()} 
         ref={playerRef}
         className="absolute top-0 left-0"
         width={'100%'}
@@ -127,23 +137,24 @@ const VideoPlayer = ({ width = "100%", height = "100%", url}) => {
       />
       {showControls && (
         <div
+        onClick={(e) => e.stopPropagation()} 
           className={`absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 p-4 transition-opacity duration-300 ${
             showControls ? "opacity-100" : "opacity-0"
           }`}
         >
-<Slider
-  value={[played * 100]}
-  max={100}
-  step={0.1}
-  onValueChange={(value) => hanldeSeekChange([value[0] / 100])}
-  onValueCommit={handleSeekMouseUp}
-  className="relative flex items-center w-full h-4"
->
-  <Slider.Track className="relative bg-gray-500 rounded-full grow h-1">
-    <Slider.Range className="absolute bg-blue-500 rounded-full h-full" />
-  </Slider.Track>
-  <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow focus:outline-none focus:ring" />
-</Slider>
+          <Slider
+            value={[played * 100]}
+            max={100}
+            step={0.1}
+            onValueChange={(value) => hanldeSeekChange([value[0] / 100])}
+            onValueCommit={handleSeekMouseUp}
+            className="relative flex items-center w-full h-4"
+          >
+            <Slider.Track className="relative bg-gray-500 rounded-full grow h-1">
+              <Slider.Range className="absolute bg-blue-500 rounded-full h-full" />
+            </Slider.Track>
+            <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow focus:outline-none focus:ring" />
+          </Slider>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Button
