@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const LectureProgressSchema = new mongoose.Schema({
     lectureId: String,
     viewed: Boolean,
-    dateViwed: Date,
+    dateViewed: Date,
 });
 
 const CourseProgressSchema = new mongoose.Schema({

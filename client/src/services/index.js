@@ -197,4 +197,13 @@ export async function fetchStudentBoughtCourseDetailsService(studentId){
     }
 }
 
+export async function getCurrentCourseProgressService(userId,  courseId){
+    try {
+        const { data } = await axiosInstance.get(`/student/course-progress/get/${userId}/${courseId}`);    
+        return data;
 
+    } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error.message);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "paypal-rest-sdk": "^1.8.1",
+    "react-confetti": "^6.2.2",
     "react-player": "^2.16.0"
   }
 }

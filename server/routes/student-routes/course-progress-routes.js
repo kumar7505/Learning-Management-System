@@ -4,4 +4,4 @@ const { getCurrentCourseProgress } = require('../../controllers/student-controll
 const router = express.Router();
 
 router.get(`/get/:userId/:courseId`, getCurrentCourseProgress);
-module.exports = router();
+module.exports = router;

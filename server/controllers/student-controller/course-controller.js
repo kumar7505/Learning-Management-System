@@ -72,7 +72,6 @@ const getStudentViewCourseDetails = async(req, res) => {
             })
         }
 
-        console.log(courseDetails);
         
         
 

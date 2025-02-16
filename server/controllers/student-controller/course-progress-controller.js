@@ -4,7 +4,10 @@ const StudentCourses = require('../../models/StudentCourses');
 
 
 const markCurrentLectureAsViewed = async(req, res) => {
-    try{} catch(e) {
+    try{
+        console.log('kuma');
+        
+    } catch(e) {
         console.log(e);
         res.status(500).json({
             success: false,
@@ -23,7 +26,7 @@ const getCurrentCourseProgress = async(req, res) => {
 
         if(!isCurrentCoursePurchasedByCurrentUserOrNot){
             return res.status(200).json({
-                success: false,
+                success: true,
                 data: {
                     isPurchased: false,
                 },
@@ -31,9 +34,9 @@ const getCurrentCourseProgress = async(req, res) => {
             })
         }
 
-        const currentUserCourseProgress = await CourseProgress.findOne({userId, courseId}).populate('courseId');
+        const currentUserCourseProgress = await CourseProgress.findOne({userId, courseId});
 
-        if(currentUserCourseProgress.lecturesProgress.length === 0){
+        if(!currentUserCourseProgress || currentUserCourseProgress?.lecturesProgress?.length === 0){
             const course = await Course.findById(courseId);
             if(!course){
                 return res.status(404).json({
@@ -48,15 +51,18 @@ const getCurrentCourseProgress = async(req, res) => {
                 data: {
                     courseDetails: course,
                     progress: [],
-                    isPurchased: true
+                    isPurchased: true,
+                    completed: true,
                 }
             })
         }
 
+        const courseDetails = await Course.findById(courseId);
+
         res.status(200).json({
             success: true,
             data: {
-                courseDetails: currentUserCourseProgress.courseId,
+                courseDetails,
                 progress: currentUserCourseProgress.lecturesProgress,
                 completed: currentUserCourseProgress.completed,
                 completionDate: currentUserCourseProgress.completionDate
@@ -72,7 +78,10 @@ const getCurrentCourseProgress = async(req, res) => {
 }
 
 const resetCurrentCourseProgress = async(req, res) => {
-    try{} catch(e) {
+    try{
+        console.log('kum');
+        
+    } catch(e) {
         console.log(e);
         res.status(500).json({
             success: false,
