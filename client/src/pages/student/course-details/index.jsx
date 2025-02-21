@@ -40,6 +40,7 @@ const StudentViewCourseDetailsPage = () => {
   const [approvalUrl, setApprovalUrl] = useState('');
   const navigate = useNavigate();
   async function fetchStudentViewCourseDetails(){
+    console.log(currentCourseDetailsId, auth?.user._id, 'lol')
     const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(currentCourseDetailsId, auth?.user._id);
     if(checkCoursePurchaseInfoResponse?.success  && checkCoursePurchaseInfoResponse?.data){
       navigate(`/course-progress/${currentCourseDetailsId}`);

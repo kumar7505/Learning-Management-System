@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import VideoPlayer from '@/components/video-player';
 import { AuthContext } from '@/context/auth-context';
 import { StudentContext } from '@/context/student-context';
-import { getCurrentCourseProgressService, markLectureAsViewed } from '@/services';
+import { getCurrentCourseProgressService, markLectureAsViewedService } from '@/services';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react'
 import Confetti from 'react-confetti';
@@ -28,10 +28,15 @@ const StudentViewCourseProgressPage = () => {
 
   async function fetchCurrentCourseProgress(){
     const res = await getCurrentCourseProgressService(auth?.user?._id, id);
+    console.log("Course progress response:", res);
+
     if(res?.success){
       if(!res?.data?.isPurchased){
+        console.log("Locking course because isPurchased is false!");
         setLockCourse(true);
+        console.log(res);
       } else {
+        setLockCourse(false); 
         setStudentCurrentCourseProgress({
           courseDetails: res?.data?.courseDetails,
           progress: res?.data?.progress,
@@ -42,15 +47,25 @@ const StudentViewCourseProgressPage = () => {
           setShowCourseCompleteDialog(true);
           setShowConfetti(true);
 
-          return 
+          return;
         }
+        console.log(res?.data?.progress.length);
+
 
         if(res?.data?.progress.length === 0){
           console.log(res?.data?.courseDetails?.curriculum[0], 'currentLecture');
-          
+           
           setCurrentLecture(res?.data?.courseDetails?.curriculum[0])
         } else {
-
+          console.log('kumar89');
+          
+          const lastIndexOfViewedAsTrue = res?.data?.progress.reduceRight(
+            (acc, obj, index) => (              
+              acc === -1 && obj.viewed ? index : acc
+            ), -1
+          );
+          
+          setCurrentLecture(res?.data?.courseDetails?.curriculum[lastIndexOfViewedAsTrue + 1]);
         }
       }
     }
@@ -58,7 +73,11 @@ const StudentViewCourseProgressPage = () => {
 
   async function updateCourseProgress() {
     if(currentLecture){
-      const res = await markLectureAsViewed(auth?.user?._id, studentCurrentCourseProgress?.courseDetails?._id, currentLecture?._id)
+      const res = await markLectureAsViewedService(auth?.user?._id, studentCurrentCourseProgress?.courseDetails?._id, currentLecture?._id)
+    
+      if(res?.success){
+        fetchCurrentCourseProgress()
+      }
     }
   }
   useEffect(() => {
@@ -70,7 +89,7 @@ const StudentViewCourseProgressPage = () => {
 
   useEffect(() => {
     if(currentLecture?.progressValue === 1)
-      updateCourseProgress
+      updateCourseProgress()
   }, [currentLecture])
   
   useEffect(() => {
@@ -111,7 +130,8 @@ const StudentViewCourseProgressPage = () => {
             width="100%"
             height="500px"
             url={currentLecture?.videoUrl} 
-            onProgressUpdate={currentLecture}
+            onProgressUpdate={setCurrentLecture}
+            progressData={currentLecture}
           />
           <div className="p-6 bg-[#1c1d1f]">
             <h2 className='text-2xl font-bold mb-2'>

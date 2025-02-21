@@ -1,9 +1,9 @@
 import React from 'react'
 import StudentViewCommonHeader from './header'
-import { Outlet, useLoaction } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 const StudentViewCommonLayout = () => {
-  const location = useLoaction()
+  const location = useLocation()
   return (
     <div>
       {

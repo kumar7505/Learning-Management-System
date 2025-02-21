@@ -209,7 +209,7 @@ export async function getCurrentCourseProgressService(userId,  courseId){
 }
 
 
-export async function markLectureAsViewed(userId, courseId, lectureId){
+export async function markLectureAsViewedService(userId, courseId, lectureId){
     try {
         const { data } = await axiosInstance.post(`/student/course-progress/mark-lecture-viewed`, {
             userId,
