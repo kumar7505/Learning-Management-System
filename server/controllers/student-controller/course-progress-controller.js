@@ -136,6 +136,7 @@ const getCurrentCourseProgress = async(req, res) => {
 }
 
 const resetCurrentCourseProgress = async(req, res) => {
+    
     try{
         const {userId, courseId} = req.body;
         
