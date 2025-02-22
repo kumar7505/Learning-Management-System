@@ -106,7 +106,7 @@ const StudentViewCourseProgressPage = () => {
   
   useEffect(() => {
     if(showConfetti)
-      setTimeout(() => setShowConfetti(false), 8000)
+      setTimeout(() => setShowConfetti(false), 15000);
   }, [showConfetti]);
 
   // console.log(currentLecture, 'currentLecture');
@@ -189,7 +189,7 @@ const StudentViewCourseProgressPage = () => {
       </div>
       
       <Dialog open={lockCourse}>
-        <DialogContent className="sm:w-[425px]">
+        <DialogContent showOverlay={false} className="sm:w-[425px]">
           <DialogHeader>
             <DialogTitle>You can't view this page</DialogTitle>
               <DialogDescription>

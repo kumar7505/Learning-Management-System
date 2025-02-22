@@ -86,7 +86,7 @@ const StudentViewCoursesPage = () => {
         
     }
 
-     async function handleCourseNavigate(getCurrentCourseId) {
+    async function handleCourseNavigate(getCurrentCourseId) {
         const res = await checkCoursePurchaseInfoService(getCurrentCourseId, auth?.user?._id);
 
         if(res?.success){
@@ -97,7 +97,6 @@ const StudentViewCoursesPage = () => {
             }
         }
         console.log(res, 'courseNavigate');
-        
     }
 
     useEffect(() => {
